@@ -2,13 +2,15 @@
   "name": "linfo1212-r-appsinf-hiddenplaces",
   "version": "1.0.0",
   "description": "HiddenPlaces",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/HOIg3r/LINFO1212-R-APPSINF-HiddenPlaces.git"
   },
   "author": "Jacques Hogge, Neil Patris, Romain Barbason",
   "license": "Apache 2.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
