@@ -9,17 +9,64 @@
 </head>
 <body>
 <header>
-    <div class="navbar">
-        <ul>
-            <h3 class="Logo">HiddenPlaces</h3>
-            <li class="home"><a href="index.html">Acceuil</a></li>
-            <li class="log-in"><a href="log-in.html">Log-in</a></li>
-            <li class="places"><a href="places.html">Places</a></li>
-            <li class="add-places"><a href="addPlaces.html">Ajouter un lieux</a></li>
-            <li class="map"><a href="map.html">Map</a></li>
-            <li class="myProfile"><a href="myProfile.html">Mon profil</a></li>
-        </ul>
+    <div class="topnav" id="myTopnav">
+        <a href="index.html" class="active">HiddenPlaces</a>
+        <a href="index.html">Home</a>
+        <a href="log-in.html">Log-in</a>
+        <a href="places.html">Places</a>
+        <a href="addPlaces.html">Add places</a>
+        <a href="map.html">map</a>
+
+        <div class="dropdown">
+            <button class="dropbtn" onclick="profileDrop()">
+                <img src="img/user.png" alt="Profile picture" id="profile_picture" width="25px"
+                     height="25px" class="profile-picture">
+                <i class="fa fa-caret-down" style="float: left; margin-left: 7px; margin-top:4px; " id="profile_arrow"></i>
+            </button>
+            <div class="dropdown-content" id="dropdownProfile">
+                <a href="myProfile.html">Mon profil</a>
+                <a href="#">Link 2</a>
+                <a >Se déconnecter</a>
+            </div>
+        </div>
+        <a href="javascript:void(0);" class="icon" onclick="mobileNavbar()">
+            <i class="fa fa-bars"></i>
+        </a>
     </div>
+    <script>
+        function mobileNavbar() {
+            var x = document.getElementById("myTopnav");
+            if (x.className === "topnav") {
+                x.className += " responsive";
+            } else {
+                x.className = "topnav";
+            }
+        }
+
+        /* When the user clicks on the button,
+    toggle between hiding and showing the dropdown content */
+        function profileDrop() {
+            var drop_state = document.getElementById("dropdownProfile");
+            drop_state.classList.toggle("show");
+            var dropdown = document.getElementById("profile_arrow");
+            if (drop_state.classList.contains('show')) {
+                dropdown.className = "fa fa-caret-up";
+            } else {
+                dropdown.className = "fa fa-caret-down";
+            }
+
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (e) {
+            if (!e.target.matches('.dropbtn')) {
+                var myDropdown = document.getElementById("dropdownProfile");
+                if (myDropdown.classList.contains('show')) {
+                    myDropdown.classList.remove('show');
+                }
+            }
+        }
+    </script>
 </header>
 
 </body>
