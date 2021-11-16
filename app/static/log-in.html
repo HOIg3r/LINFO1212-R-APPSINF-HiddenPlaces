@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>HiddenPlaces - Home</title>
     <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="log-in.css">
+
 
 
 </head>
@@ -17,6 +19,8 @@
         <a href="addPlaces.html">Add places</a>
         <a href="map.html">map</a>
 
+        <input type="search">
+        <button type="submit">Search</button>
         <div class="dropdown">
             <button class="dropbtn" onclick="profileDrop()">
                 <img src="img/user.png" alt="Profile picture" id="profile_picture" width="25px"
@@ -68,6 +72,46 @@
         }
     </script>
 </header>
+
+<div class="container">
+    <h2>Se connecter</h2>
+    <h2>S'inscrire</h2>
+    <div class="sub-container">
+        <div class="log-in">
+
+            <form class="form_log-in" method="post" action="log-in">
+                <label>Email ou Username</label><br>
+                <input type="text" placeholder="Email/Username"><br>
+
+                <label>Password</label><br>
+                <input type="password"><br>
+
+                <button type="submit">Log-in</button>
+            </form>
+        </div>
+        <div class="sign-up">
+
+            <form class="form_sign-up" method="post" action="/sign-up">
+                <label>Username</label><br>
+                <input type="text" placeholder="Username"><br>
+
+                <label>Email</label><br>
+                <input type="email" placeholder="example@hotmail.com"><br>
+
+                <label>Fullname</label><br>
+                <input type="text" placeholder="Fullname"><br>
+
+                <label>Password</label><br>
+                <input type="password"><br>
+
+                <label>Confirm Password</label><br>
+                <input type="password"><br>
+
+                <button type="submit">Sing-up</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
 

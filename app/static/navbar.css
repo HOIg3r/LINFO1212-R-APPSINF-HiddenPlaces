@@ -1,10 +1,11 @@
 body {
     margin: 0;
     padding: 0;
+    background-color:#f5f0e1;
 }
 .topnav {
     overflow: hidden;
-    background-color: #333;
+    background-color: #1e3d59;
 }
 
 .topnav a {
@@ -18,12 +19,12 @@ body {
 }
 
 .topnav a:hover, .dropdown:hover, .dropbtn, .dropbtn:focus {
-    background-color: #ddd;
+    background-color: #ffc13b;
     color: black;
 }
 
 .topnav a.active {
-    background-color: #04AA6D;
+    background-color: #ff6e40;
     color: white;
 }
 
@@ -109,4 +110,8 @@ body {
 .profile-picture {
     float: left;
     border-radius: 50%;
+}
+
+footer {
+    text-align: center;
 }
