@@ -2,6 +2,7 @@ body {
     margin: 0;
     padding: 0;
     background-color:#f5f0e1;
+    background-image: url("/img/");
 }
 .topnav {
     overflow: hidden;
@@ -16,6 +17,15 @@ body {
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
+}
+#search {
+    display: inline;
+    position: absolute;
+    top: 3%;
+    left: 50%;
+}
+#search input {
+    width: 450px;
 }
 
 .topnav a:hover, .dropdown:hover, .dropbtn, .dropbtn:focus {
@@ -114,4 +124,7 @@ body {
 
 footer {
     text-align: center;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
 }
