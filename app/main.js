@@ -1,19 +1,31 @@
 // Import module
 var express = require('express');
-//var session = require('express-session');
-//var bodyParser = require("body-parser");
+var session = require('express-session');
+var bodyParser = require("body-parser");
 var app = express();
-//var consolidate = require('consolidate');
-//var mongo = require("mongodb");
-//var MongoClient = mongo.MongoClient;
-//var url = "mongodb://localhost:27017/";
+var consolidate = require('consolidate');
+var mongo = require("mongodb");
+var MongoClient = mongo.MongoClient;
+var url = "mongodb://localhost:27017/";
 var https = require('https');
 var fs = require('fs');
 
 
 // Create the Cookie settings
+app.use(session({
+    secret: "HiDdEnPlAcEsRoJaNe1212nveEnfEZ",
+    resave: false,
+    saveUninitialized: true,
+    cookie:{
+        path: "/",
+        httpOnly: true,
+        secure: true,
+        maxAge: null,
+    }
+}))
 
-
+//Create body for the info send by form
+app.use(bodyParser.urlencoded({encoded:true}))
 
 // Start the site
 app.use(express.static('static'));
