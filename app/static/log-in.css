@@ -1,3 +1,29 @@
-.sub-container{
-    display:flex;
+.container{
+    display: flex;
+}
+
+.log-in {
+    text-align: center;
+}
+
+
+.sign-up {
+    text-align: center;
+}
+
+
+.form_log-in {
+    padding-top: 20px;
+    padding-bottom: 40px;
+    margin: 100px;
+    text-decoration: none;
+    color: #000000;
+}
+
+.form_sign-up{
+    padding-top: 20px;
+    padding-bottom: 40px;
+    margin: 100px;
+    text-decoration: none;
+    color: #000000;
 }
