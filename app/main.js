@@ -13,6 +13,8 @@ let fs = require('fs');
 //import hash algo and create salt and hash code
 let bcrypt = require('bcryptjs');
 
+let convert = require('mongo-image-converter')
+
 
 // Create the Cookie settings
 app.use(session({
@@ -28,7 +30,8 @@ app.use(session({
 }))
 
 //Create body for the info send by form
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json({limit: '16mb', extended: true}))
+app.use(bodyParser.urlencoded({limit: '16mb', extended: true}))
 
 //use hogan and set the files
 app.engine('html', consolidate.hogan);
@@ -46,12 +49,30 @@ app.get('/login.html', function (req, res) {
 })
 
 app.post('/login', (req, res,) => {
-    // Compare the password and the hashed password stocked in the DB
-    bcrypt.compare(req.body.login_password, hashed_password, function (err, res) {
-        if (res) {
-            res.redirect('index.html')
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        else {
+            const dbo = db.db('hiddenplaces');
+            dbo.collection('users').findOne({username: req.body.login_identifiant}, (err, doc) =>{
+                if (doc == null){
+                    res.redirect('login.html')
+                }else{
+                    // Compare the password and the hashed password stocked in the DB
+                    bcrypt.compare(req.body.login_password, doc.password, function (err, res) {
+                        if (res) {
+                            res.session.username = req.body.login_identifiant
+                            res.redirect('index.html')
+                        }else{
+                            res.redirect('login.html')
+                        }
+                    });
+                }
+            })
         }
-    });
+    })
+    // close the DB
+    // We open the DB only if it's necessary
+    MongoClient.close()
 })
 
 app.post('/signup', (req, res,) => {
