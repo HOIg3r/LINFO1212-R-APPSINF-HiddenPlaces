@@ -53,7 +53,7 @@ app.post('/login', (req, res,) => {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         else {
-            const dbo = db.db('hiddenplaces');
+            const dbo = db.db('hiddenplaces-db');
             dbo.collection('users').findOne({username: req.body.login_identifiant}, (err, doc) => {
                 if (doc == null) {
                     res.redirect('login.html')
@@ -82,7 +82,7 @@ app.post('/signup', (req, res,) => {
         if (req.body.signup_password !== req.body.signup_confirmed_password) {
             res.redirect('login.html')
         } else {
-            const dbo = db.db('hiddenplaces');
+            const dbo = db.db('hiddenplaces-db');
             dbo.collection('users').findOne({username: req.body.signup_username}, (err, doc) => {
                 if (err) throw err;
                 if (doc != null) {
@@ -131,6 +131,24 @@ app.get('/myProfile.html', function (req, res) {
 app.get('/logout.html', function (req, res) {
     res.redirect('index.html')
 })
+app.post("/addplace", function (req, res, next) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        else {
+            const dbo = db.db('hiddenplaces-db');
+            const latlong = [parseInt(req.body.latitude) ,parseInt(req.body.longitude)];
+            dbo.collection("places").insertOne({
+                name: req.body.name,
+                coordinate: latlong,
+                rating: req.body.rating,
+                description: req.body.description,
+            }, (err, doc) => {
+                if (err) throw err;
+                res.redirect("index.html")
+            })
+        }
+    })
+});
 
 
 // Start the site

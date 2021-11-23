@@ -5,6 +5,12 @@
     <title>HiddenPlaces - Home</title>
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="addplaces.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
 
 </head>
 <body>
@@ -37,19 +43,43 @@
         </div>
     </div>
 </header>
-
+<div id="map"></div>
+<script>
+    var mymap = L.map('map').setView([51.505, -0.09], 13);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoibGViZWxnZSIsImEiOiJja3djNjk0cXMwN241MnR0M292NGJqcDU5In0.-NAdVQ9n-CIrhhRDd1vv5w'
+    }).addTo(mymap);
+    var mp = {};
+    mymap.on("click", function(e){
+        if (mp != undefined) {
+            mymap.removeLayer(mp);
+        };
+        mp = new L.Marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
+        var lat = document.getElementsByName("latitude");
+        var long = document.getElementsByName("longitude");
+        lat.value = (e.latlng.lat).toString();
+        long.value = (e.latlng.lng).toString();
+    });
+</script>
 <div>
-    <form class="add_places">
+    <form class="add_places" method="post" action="addplace">
         <input type="file" accept="image/*" required>
 
-        <label>Add a description</label>
-        <input type="textarea" required>
+        <label>Add a name</label>
+        <input type="textarea" name="name" required>
 
         <label> Note/10</label>
-        <input type="number" required>
+        <input type="number" name="rating" required>
+        <label>Add a description</label>
+        <input type="textarea" name="description" required>
 
-        <label>Add a adresse</label>
-        <input type="textarea" required>
+        <input type="hidden" name="latitude" value="" size ="40" />
+        <input type="hidden" name="longitude" value="" size ="40" />
 
         <button type="submit">Submit</button>
     </form>
