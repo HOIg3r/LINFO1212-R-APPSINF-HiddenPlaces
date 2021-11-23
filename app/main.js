@@ -151,6 +151,24 @@ app.get('/logout.html', function (req, res) {
     req.session.destroy()
     res.redirect('index.html')
 })
+app.post("/addplace", function (req, res, next) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        else {
+            const dbo = db.db('hiddenplaces-db');
+            const latlong = [parseInt(req.body.latitude) ,parseInt(req.body.longitude)];
+            dbo.collection("places").insertOne({
+                name: req.body.name,
+                coordinate: latlong,
+                rating: req.body.rating,
+                description: req.body.description,
+            }, (err, doc) => {
+                if (err) throw err;
+                res.redirect("index.html")
+            })
+        }
+    })
+});
 
 
 // Start the site
