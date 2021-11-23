@@ -41,19 +41,24 @@ app.set('views', 'static');
 //render the good html
 
 app.get('/index.html', function (req, res) {
-    console.log(req.session)
-    res.render('index.html')
+    if(req.session.username !== undefined){
+        res.render('index.html',{username:req.session.username})
+    }
+    res.render('index.html',{username:"Anonyme"})
 })
 
 app.get('/login.html', function (req, res) {
-    res.render('login.html')
+    if(req.session.username !== undefined){
+        res.render('login.html',{username:req.session.username})
+    }
+    res.render('login.html',{username:"Anonyme"})
 })
 
 app.post('/login', (req, res,) => {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         else {
-            const dbo = db.db('hiddenplaces');
+            const dbo = db.db('hiddenplaces-db');
             dbo.collection('users').findOne({username: req.body.login_identifiant}, (err, doc) => {
                 if (doc == null) {
                     res.redirect('login.html')
@@ -82,7 +87,7 @@ app.post('/signup', (req, res,) => {
         if (req.body.signup_password !== req.body.signup_confirmed_password) {
             res.redirect('login.html')
         } else {
-            const dbo = db.db('hiddenplaces');
+            const dbo = db.db('hiddenplaces-db');
             dbo.collection('users').findOne({username: req.body.signup_username}, (err, doc) => {
                 if (err) throw err;
                 if (doc != null) {
@@ -113,22 +118,37 @@ app.post('/signup', (req, res,) => {
 })
 
 app.get('/place.html', function (req, res) {
-    res.render('places.html')
+    if(req.session.username !== undefined){
+        res.render('place.html',{username:req.session.username})
+    }
+    res.render('place.html',{username:"Anonyme"})
 })
 
 app.get('/addPlaces.html', function (req, res) {
-    res.render('addPlaces.html')
+    if(req.session.username !== undefined){
+        res.render('addPlace.html',{username:req.session.username})
+    }
+    res.render('addPlaces',{username:"Anonyme"})
 })
 
 app.get('/map.html', function (req, res) {
-    res.render('map.html')
+    if(req.session.username !== undefined){
+        res.render('map.html',{username:req.session.username})
+    }
+    res.render('map.html',{username:"Anonyme"})
 })
 
 app.get('/myProfile.html', function (req, res) {
-    res.render('myProfile.html')
+    if(req.session.username !== undefined){
+        res.render('myProfile.html',{username:req.session.username, fullname: req.session.fullname, email:req.session.email})
+    }else{
+        res.redirect('index.html')
+    }
+
 })
 
 app.get('/logout.html', function (req, res) {
+    req.session.destroy()
     res.redirect('index.html')
 })
 
