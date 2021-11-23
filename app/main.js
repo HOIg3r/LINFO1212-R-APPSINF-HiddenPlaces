@@ -53,16 +53,15 @@ app.post('/login', (req, res,) => {
         if (err) throw err;
         else {
             const dbo = db.db('hiddenplaces');
-            dbo.collection('users').findOne({username: req.body.login_identifiant}, (err, doc) =>{
-                if (doc == null){
+            dbo.collection('users').findOne({username: req.body.login_identifiant}, (err, doc) => {
+                if (doc == null) {
                     res.redirect('login.html')
-                }else{
+                } else {
                     // Compare the password and the hashed password stocked in the DB
-                    bcrypt.compare(req.body.login_password, doc.password, function (err, res) {
-                        if (res) {
-                            res.session.username = req.body.login_identifiant
+                    bcrypt.compare(req.body.login_password, doc.hashed_password, function (err, resBcrypt) {
+                        if (resBcrypt) {
                             res.redirect('index.html')
-                        }else{
+                        } else {
                             res.redirect('login.html')
                         }
                     });
@@ -70,21 +69,39 @@ app.post('/login', (req, res,) => {
             })
         }
     })
-    // close the DB
-    // We open the DB only if it's necessary
-    MongoClient.close()
+
 })
 
 app.post('/signup', (req, res,) => {
-    if (req.body.signup_password === req.body.signup_confirmed_password) {
-        // Generate the password
-        bcrypt.genSalt(10, function (err, salt) {
-            // Hash the password
-            bcrypt.hash(req.body.signup_password, salt, function (err, hash) {
-                // Store hash in your password DB.
-            });
-        });
-    }
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        if (req.body.signup_password !== req.body.signup_confirmed_password) {
+            res.redirect('login.html')
+        } else {
+            const dbo = db.db('hiddenplaces');
+            dbo.collection('users').findOne({username: req.body.signup_username}, (err, doc) => {
+                if (err) throw err;
+                if (doc != null) {
+                    res.redirect('login.html')
+                } else {
+
+                    bcrypt.genSalt(10, function (err, salt) {
+                        bcrypt.hash(req.body.signup_password, salt, function (err, hash) {
+                            dbo.collection('users').insertOne({
+                                username: req.body.signup_username,
+                                hashed_password: hash,
+                                mail: req.body.signup_email,
+                                fullname: req.body.signup_fullname
+                            })
+                        })
+                    })
+                    req.session.username = req.body.signup_username
+                    res.redirect('index.html')
+                }
+            })
+        }
+    })
+
 
 })
 
