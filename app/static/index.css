@@ -1,11 +1,33 @@
 html {
     font-family: 'Times New Roman', serif;
-    background-image: url('https://images.unsplash.com/photo-1548588681-adf41d474533?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=875&q=80');
+    background-image: url('img/background.jpg');
     /* Full height */
     height: 100%;
 
     /* Center and scale the image nicely */
-    background-position: center;
+    background-position: bottom;
     background-repeat: no-repeat;
     background-size: cover;
+
+}
+
+.welcome_message{
+    margin-left:60px;
+    margin-top:60px;
+    color:white;
+    line-height:13px;
+
+}
+
+.welcome_message span{
+    background-color:black;
+    padding: 5px 10px;
+
+}
+
+.welcome_message img{
+    float: right;
+    margin-right: 150px;
+    height:152px;
+    width:152px;
 }

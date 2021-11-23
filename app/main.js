@@ -1,14 +1,17 @@
 // Import module
-var express = require('express');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var app = express();
-var consolidate = require('consolidate');
-var mongo = require('mongodb');
-var MongoClient = mongo.MongoClient;
-var url = 'mongodb://localhost:27017/';
-var https = require('https');
-var fs = require('fs');
+let express = require('express');
+let session = require('express-session');
+let bodyParser = require('body-parser');
+let app = express();
+let consolidate = require('consolidate');
+let mongo = require('mongodb');
+let MongoClient = mongo.MongoClient;
+let url = 'mongodb://localhost:27017/';
+let https = require('https');
+let fs = require('fs');
+
+//import hash algo and create salt and hash code
+let bcrypt = require('bcryptjs');
 
 
 // Create the Cookie settings
@@ -31,6 +34,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.engine('html', consolidate.hogan);
 app.set('views', 'static');
 
+
 //render the good html
 
 app.get('/index.html', function (req, res) {
@@ -39,6 +43,28 @@ app.get('/index.html', function (req, res) {
 
 app.get('/login.html', function (req, res) {
     res.render('login.html')
+})
+
+app.post('/login', (req, res,) => {
+    // Compare the password and the hashed password stocked in the DB
+    bcrypt.compare(req.body.login_password, hashed_password, function (err, res) {
+        if (res) {
+            res.redirect('index.html')
+        }
+    });
+})
+
+app.post('/signup', (req, res,) => {
+    if (req.body.signup_password === req.body.signup_confirmed_password) {
+        // Generate the password
+        bcrypt.genSalt(10, function (err, salt) {
+            // Hash the password
+            bcrypt.hash(req.body.signup_password, salt, function (err, hash) {
+                // Store hash in your password DB.
+            });
+        });
+    }
+
 })
 
 app.get('/place.html', function (req, res) {
@@ -58,7 +84,7 @@ app.get('/myProfile.html', function (req, res) {
 })
 
 app.get('/logout.html', function (req, res) {
-    res.render('logout.html')
+    res.redirect('index.html')
 })
 
 
@@ -70,3 +96,4 @@ https.createServer({
     passphrase: 'HiddenPlaces'
 }, app).listen(8080);
 console.log('---- Site: https://localhost:8080/index.html ----')
+

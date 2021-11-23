@@ -26,7 +26,7 @@
 
         <div class="dropdown">
             <!--TODO : Put username vertical align-->
-            <p class="username">username</p>
+            <p class="username">{{username}}</p>
             <img src="img/user.png" alt="Profile picture" id="profile_picture" width="40px" height="40px"
                  class="profile-picture">
 
@@ -42,12 +42,12 @@
     <div class="log-in">
         <h2>Se connecter</h2>
 
-        <form class="form_log-in" method="post" action="log-in">
+        <form class="form_log-in" method="post" action="login">
             <label>Email ou Username</label><br>
-            <input type="text" placeholder="Email/Username"><br>
+            <input name="login_identifiant" type="text" placeholder="Email/Username"><br>
 
             <label>Password</label><br>
-            <input type="password"><br>
+            <input name="login_password" type="password"><br>
 
             <button type="submit">Log-in</button>
         </form>
@@ -55,21 +55,21 @@
     <div class="sign-up">
         <h2>S'inscrire</h2>
 
-        <form class="form_sign-up" method="post" action="/sign-up">
+        <form class="form_sign-up" method="post" action="/signup">
             <label>Username</label><br>
-            <input type="text" placeholder="Username"><br>
+            <input name="signup_username" type="text" placeholder="Username"><br>
 
             <label>Email</label><br>
-            <input type="email" placeholder="example@hotmail.com"><br>
+            <input name="signup_email" type="email" placeholder="example@hotmail.com"><br>
 
             <label>Fullname</label><br>
-            <input type="text" placeholder="Fullname"><br>
+            <input name="signup_fullname" type="text" placeholder="Fullname"><br>
 
             <label>Password</label><br>
-            <input type="password"><br>
+            <input name="signup_password" type="password"><br>
 
             <label>Confirm Password</label><br>
-            <input type="password"><br>
+            <input name="signup_confirmed_password" type="password"><br>
 
             <button type="submit">Sing-up</button>
         </form>
