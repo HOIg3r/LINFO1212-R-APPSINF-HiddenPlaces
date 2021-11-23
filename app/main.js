@@ -41,6 +41,7 @@ app.set('views', 'static');
 //render the good html
 
 app.get('/index.html', function (req, res) {
+    console.log(req.session)
     res.render('index.html')
 })
 
@@ -60,6 +61,9 @@ app.post('/login', (req, res,) => {
                     // Compare the password and the hashed password stocked in the DB
                     bcrypt.compare(req.body.login_password, doc.hashed_password, function (err, resBcrypt) {
                         if (resBcrypt) {
+                            req.session.username = doc.username
+                            req.session.fullname = doc.fullname
+                            req.session.email = doc.email
                             res.redirect('index.html')
                         } else {
                             res.redirect('login.html')
@@ -90,12 +94,15 @@ app.post('/signup', (req, res,) => {
                             dbo.collection('users').insertOne({
                                 username: req.body.signup_username,
                                 hashed_password: hash,
-                                mail: req.body.signup_email,
-                                fullname: req.body.signup_fullname
+                                email: req.body.signup_email,
+                                fullname: req.body.signup_fullname,
                             })
+
                         })
                     })
                     req.session.username = req.body.signup_username
+                    req.session.fullname = req.body.signup_fullname
+                    req.session.email = req.body.signup_email
                     res.redirect('index.html')
                 }
             })
