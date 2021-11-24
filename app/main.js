@@ -128,7 +128,7 @@ app.get('/addPlaces.html', function (req, res) {
     if(req.session.username !== undefined){
         res.render('addPlaces.html',{username:req.session.username})
     }
-    res.render('addPlaces',{username:"Anonyme"})
+    res.render('addPlaces.html',{username:"Anonyme"})
 })
 
 app.get('/map.html', function (req, res) {
