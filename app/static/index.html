@@ -44,9 +44,24 @@
     <img src="img/logo.png">
     <h2><span>HiddenPlaces</span> </h2>
     <h1><span>The beautifulest places all around you</span></h1>
+</div>
+<div style="display:{{style}}" id="overlay" class="overlay">
+    <div id="popup-delete-account" class="popup-delete-account">
+        <h2>{{errorMessage}} <span class="btnClose" id="btnClose">&times;</span></h2>
 
+    </div>
 </div>
 
+<script>
+    var btnClose = document.getElementById("btnClose");
+    var overlay = document.getElementById("overlay");
+
+    btnClose.addEventListener("click", closePopup);
+
+    function closePopup() {
+        overlay.style.display = "none";
+    }
+</script>
 <footer>
     <p>&copy; 2021-2022 HiddenPlaces</p>
     <p>Tous droit réservé</p>
