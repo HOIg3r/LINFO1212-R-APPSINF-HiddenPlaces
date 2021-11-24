@@ -126,7 +126,7 @@ app.get('/place.html', function (req, res) {
 
 app.get('/addPlaces.html', function (req, res) {
     if(req.session.username !== undefined){
-        res.render('addPlace.html',{username:req.session.username})
+        res.render('addPlaces.html',{username:req.session.username})
     }
     res.render('addPlaces',{username:"Anonyme"})
 })
