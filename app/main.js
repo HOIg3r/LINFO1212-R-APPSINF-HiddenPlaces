@@ -121,8 +121,18 @@ app.get('/addPlaces.html', function (req, res) {
 })
 
 app.get('/map.html', function (req, res) {
-    res.render('map.html')
-})
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        else {
+            const dbo = db.db('hiddenplaces-db');
+            dbo.collection("geojson").find({}).toArray((err, doc) => {
+                var mapgeojson = JSON.stringify(doc);
+                res.render("map.html", {mapgeojson: mapgeojson})
+            })
+
+        }
+    })
+    });
 
 app.get('/myProfile.html', function (req, res) {
     res.render('myProfile.html')
@@ -136,16 +146,29 @@ app.post("/addplace", function (req, res, next) {
         if (err) throw err;
         else {
             const dbo = db.db('hiddenplaces-db');
-            const latlong = [parseInt(req.body.latitude) ,parseInt(req.body.longitude)];
+            const latlong = [parseFloat(req.body.longitude), parseFloat(req.body.latitude)];
+            dbo.collection("geojson").insertOne({
+                type: "Feature",
+                properties:{
+                    name: req.body.name,
+                    popupContent: req.body.description
+                },
+                geometry: {
+                    type: "Point",
+                    coordinates: latlong
+                }
+            },(err, doc) => {
+                if (err) throw err;
+            })
             dbo.collection("places").insertOne({
                 name: req.body.name,
                 coordinate: latlong,
                 rating: req.body.rating,
                 description: req.body.description,
-            }, (err, doc) => {
+            },(err, doc) => {
                 if (err) throw err;
-                res.redirect("index.html")
             })
+            res.redirect("index.html")
         }
     })
 });

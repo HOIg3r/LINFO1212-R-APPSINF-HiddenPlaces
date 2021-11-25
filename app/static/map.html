@@ -54,6 +54,26 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     zoomOffset: -1,
     accessToken: 'pk.eyJ1IjoibGViZWxnZSIsImEiOiJja3djNjk0cXMwN241MnR0M292NGJqcDU5In0.-NAdVQ9n-CIrhhRDd1vv5w'
 }).addTo(mymap);
+var mapgeojson = "{{ mapgeojson }}"
+mapgeojson = mapgeojson.replaceAll('&quot;','"');
+mapgeojson = '{"type": "FeatureCollection","features": ' + mapgeojson + '}'
+mapgeojson = JSON.parse(mapgeojson);
+console.log(mapgeojson);
+var myStyle = {
+    "color": "#ff7800",
+    "weight": 5,
+    "opacity": 0.65
+};
+function onEachFeature(feature, layer) {
+    // does this feature have a property named popupContent?
+    if (feature.properties && feature.properties.popupContent) {
+        layer.bindPopup(feature.properties.popupContent);
+    }
+}
+L.geoJSON(mapgeojson, {
+    style: myStyle,
+    onEachFeature: onEachFeature
+}).addTo(mymap);
 </script>
 </body>
 

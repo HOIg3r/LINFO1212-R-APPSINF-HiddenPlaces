@@ -60,10 +60,12 @@
             mymap.removeLayer(mp);
         };
         mp = new L.Marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
-        var lat = document.getElementsByName("latitude");
-        var long = document.getElementsByName("longitude");
-        lat.value = (e.latlng.lat).toString();
-        long.value = (e.latlng.lng).toString();
+        var lati = document.getElementById("lati");
+        var long = document.getElementById("long");
+        lati.value = e.latlng.lat;
+        long.value = e.latlng.lng;
+        console.log(lati.value);
+        console.log(long.value);
     });
 </script>
 <div>
@@ -78,8 +80,8 @@
         <label>Add a description</label>
         <input type="textarea" name="description" required>
 
-        <input type="hidden" name="latitude" value="" size ="40" />
-        <input type="hidden" name="longitude" value="" size ="40" />
+        <input id="lati" type="hidden" name="latitude" value="" size ="40" />
+        <input id="long" type="hidden" name="longitude" value="" size ="40" />
 
         <button type="submit">Submit</button>
     </form>
