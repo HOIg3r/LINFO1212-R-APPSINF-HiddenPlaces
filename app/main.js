@@ -13,7 +13,6 @@ let fs = require('fs');
 //import hash algo and create salt and hash code
 let bcrypt = require('bcryptjs');
 
-let convert = require('mongo-image-converter')
 
 
 // Create the Cookie settings
@@ -40,13 +39,19 @@ app.set('views', 'static');
 
 //render the good html
 
+//TODO: errormessage
 app.get('/index.html', function (req, res) {
-    console.log(req.session)
-    res.render('index.html')
+    if(req.session.username !== undefined){
+        res.render('index.html',{username:req.session.username,style:'block'})
+    }
+    res.render('index.html',{username:"Anonyme"})
 })
 
 app.get('/login.html', function (req, res) {
-    res.render('login.html')
+    if(req.session.username !== undefined){
+        res.render('login.html',{username:req.session.username})
+    }
+    res.render('login.html',{username:"Anonyme"})
 })
 
 app.post('/login', (req, res,) => {
@@ -61,10 +66,13 @@ app.post('/login', (req, res,) => {
                     // Compare the password and the hashed password stocked in the DB
                     bcrypt.compare(req.body.login_password, doc.hashed_password, function (err, resBcrypt) {
                         if (resBcrypt) {
+                            console.log(doc)
+                            req.session._id = doc._id
                             req.session.username = doc.username
                             req.session.fullname = doc.fullname
                             req.session.email = doc.email
                             res.redirect('index.html')
+
                         } else {
                             res.redirect('login.html')
                         }
@@ -73,7 +81,6 @@ app.post('/login', (req, res,) => {
             })
         }
     })
-
 })
 
 app.post('/signup', (req, res,) => {
@@ -113,11 +120,17 @@ app.post('/signup', (req, res,) => {
 })
 
 app.get('/place.html', function (req, res) {
-    res.render('places.html')
+    if(req.session.username !== undefined){
+        res.render('place.html',{username:req.session.username})
+    }
+    res.render('place.html',{username:"Anonyme"})
 })
 
 app.get('/addPlaces.html', function (req, res) {
-    res.render('addPlaces.html')
+    if(req.session.username !== undefined){
+        res.render('addPlaces.html',{username:req.session.username})
+    }
+    res.render('addPlaces.html',{username:"Anonyme"})
 })
 
 app.get('/map.html', function (req, res) {
@@ -127,18 +140,28 @@ app.get('/map.html', function (req, res) {
             const dbo = db.db('hiddenplaces-db');
             dbo.collection("geojson").find({}).toArray((err, doc) => {
                 var mapgeojson = JSON.stringify(doc);
-                res.render("map.html", {mapgeojson: mapgeojson})
-            })
+                if(req.session.username !== undefined){
+        			res.render('map.html',{username:req.session.username, mapgeojson: mapgeojson})
+   				}
+    			res.render('map.html',{username:"Anonyme", mapgeojson: mapgeojson})
+				})
 
-        }
-    })
+            }
+
+        })
     });
 
 app.get('/myProfile.html', function (req, res) {
-    res.render('myProfile.html')
+    if(req.session.username !== undefined){
+        res.render('myProfile.html',{username:req.session.username, fullname: req.session.fullname, email:req.session.email})
+    }else{
+        res.redirect('index.html')
+    }
+
 })
 
 app.get('/logout.html', function (req, res) {
+    req.session.destroy()
     res.redirect('index.html')
 })
 app.post("/addplace", function (req, res, next) {
