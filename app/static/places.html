@@ -5,6 +5,8 @@
     <title>HiddenPlaces - Home</title>
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="places.css">
+    <link rel="stylesheet" href="popup.css">
+
 
 </head>
 <body>
@@ -37,6 +39,29 @@
         </div>
     </div>
 </header>
+
+<div style="display:{{style}}" id="overlay" class="overlay">
+    <div id="popup-errorMessage" class="popup-errorMessage">
+        <h2>Error Message : <span class="btnClose" id="btnClose">&times;</span></h2>
+        <h3>{{errorMessage}}</h3>
+
+    </div>
+</div>
+
+<script>
+    var btnClose = document.getElementById("btnClose");
+    var overlay = document.getElementById("overlay");
+
+    btnClose.addEventListener("click", closePopup);
+
+    function closePopup() {
+        overlay.style.display = "none";
+    }
+
+    document.addEventListener("keypress", function(event) {
+        overlay.style.display = 'none'
+    });
+</script>
 
 </body>
 

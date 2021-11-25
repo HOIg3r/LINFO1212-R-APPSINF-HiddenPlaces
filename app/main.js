@@ -41,15 +41,26 @@ app.set('views', 'static');
 
 //TODO: errormessage
 app.get('/index.html', function (req, res) {
-    if(req.session.username !== undefined){
-        res.render('index.html',{username:req.session.username,style:'block'})
+
+    if (req.session.errorMessage === '' || req.session.errorMessage === undefined){
+        if(req.session.username !== undefined){
+            res.render('index.html',{username:req.session.username, style:'none'})
+        }
+        res.render('index.html',{username:'Anonyme',style:'none'})
+    }else{
+        if(req.session.username !== undefined){
+            res.render('index.html',{username:req.session.username, style:'block',errorMessage:req.session.errorMessage})
+        }
+        res.render('index.html',{username:'Anonyme', style:'block', errorMessage:req.session.errorMessage})
+        req.session.errorMessage = ''
     }
-    res.render('index.html',{username:"Anonyme"})
+
 })
 
 app.get('/login.html', function (req, res) {
+    var connected = "You are already connected, please disconnect before login or sign-up a other account"
     if(req.session.username !== undefined){
-        res.render('login.html',{username:req.session.username})
+        res.render('login.html',{username:req.session.username,style:'block', errorMessage:connected})
     }
     res.render('login.html',{username:"Anonyme"})
 })
@@ -71,6 +82,7 @@ app.post('/login', (req, res,) => {
                             req.session.username = doc.username
                             req.session.fullname = doc.fullname
                             req.session.email = doc.email
+                            req.session.errorMessage = "";
                             res.redirect('index.html')
 
                         } else {
@@ -110,6 +122,7 @@ app.post('/signup', (req, res,) => {
                     req.session.username = req.body.signup_username
                     req.session.fullname = req.body.signup_fullname
                     req.session.email = req.body.signup_email
+                    req.session.errorMessage = ""
                     res.redirect('index.html')
                 }
             })
@@ -155,6 +168,7 @@ app.get('/myProfile.html', function (req, res) {
     if(req.session.username !== undefined){
         res.render('myProfile.html',{username:req.session.username, fullname: req.session.fullname, email:req.session.email})
     }else{
+        req.session.errorMessage = "You are not connected, you cant access to your profile\n pls login or create a account."
         res.redirect('index.html')
     }
 
