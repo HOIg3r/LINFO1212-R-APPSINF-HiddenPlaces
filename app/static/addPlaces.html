@@ -32,7 +32,7 @@
 
         <div class="dropdown">
             <!--TODO : Put username vertical align-->
-            <p class="username">username</p>
+            <p class="username">{{username}}</p>
             <img src="img/user.png" alt="Profile picture" id="profile_picture" width="40px" height="40px"
                  class="profile-picture">
 
@@ -43,9 +43,10 @@
         </div>
     </div>
 </header>
+<h1>Add a Place</h1>
 <div id="map"></div>
 <script>
-    var mymap = L.map('map').setView([51.505, -0.09], 13);
+    var mymap = L.map('map').setView([50.70193521337628,4.4604133131427925], 6);
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
@@ -64,33 +65,21 @@
         var long = document.getElementById("long");
         lati.value = e.latlng.lat;
         long.value = e.latlng.lng;
-        console.log(lati.value);
-        console.log(long.value);
     });
 </script>
-<div>
-    <form class="add_places" method="post" action="addplace">
-        <input type="file" accept="image/*" required>
-
-        <label>Add a name</label>
-        <input type="textarea" name="name" required>
-
-        <label> Note/10</label>
-        <input type="number" name="rating" required>
-        <label>Add a description</label>
-        <input type="textarea" name="description" required>
-
+    <form class="add_places" id="form" method="post" action="addplace">
+        <!-- <input type="file" accept="image/*" required> !-->
+        <input type="textarea" name="name" id="name" placeholder="Add a name" required>
+        <textarea type="textarea" name="description" id="description" placeholder="Add a description" required></textarea>
         <input id="lati" type="hidden" name="latitude" value="" size ="40" />
         <input id="long" type="hidden" name="longitude" value="" size ="40" />
-
         <button type="submit">Submit</button>
     </form>
-</div>
-
 </body>
-
+<!--
 <footer>
     <p>&copy; 2021-2022 HiddenPlaces</p>
     <p>Tous droit réservé</p>
 </footer>
+!-->
 </html>
