@@ -5,6 +5,8 @@
     <title>HiddenPlaces - Home</title>
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="popup.css">
+
 
 </head>
 <body>
@@ -44,10 +46,10 @@
 
         <form class="form_log-in" method="post" action="login">
             <label>Email ou Username</label><br>
-            <input name="login_identifiant" type="text" placeholder="Email/Username"><br>
+            <input name="login_identifiant" type="text" placeholder="Email/Username" required><br>
 
             <label>Password</label><br>
-            <input name="login_password" type="password"><br>
+            <input name="login_password" type="password" required><br>
 
             <button type="submit">Log-in</button>
         </form>
@@ -57,25 +59,47 @@
 
         <form class="form_sign-up" method="post" action="/signup">
             <label>Username</label><br>
-            <input name="signup_username" type="text" placeholder="Username"><br>
+            <input name="signup_username" type="text" placeholder="Username" required><br>
 
             <label>Email</label><br>
-            <input name="signup_email" type="email" placeholder="example@hotmail.com"><br>
+            <input name="signup_email" type="email" placeholder="example@hotmail.com" required><br>
 
             <label>Fullname</label><br>
-            <input name="signup_fullname" type="text" placeholder="Fullname"><br>
+            <input name="signup_fullname" type="text" placeholder="Fullname" required><br>
 
             <label>Password</label><br>
-            <input name="signup_password" type="password"><br>
+            <input name="signup_password" type="password" required><br>
 
             <label>Confirm Password</label><br>
-            <input name="signup_confirmed_password" type="password"><br>
+            <input name="signup_confirmed_password" type="password" required><br>
 
-            <button type="submit">Sing-up</button>
+            <button type="submit">Sign-up</button>
         </form>
     </div>
 </div>
 
+<div style="display:{{style}}" id="overlay" class="overlay">
+    <div id="popup-errorMessage" class="popup-errorMessage">
+        <h2>Error Message : <span class="btnClose" id="btnClose">&times;</span></h2>
+        <h3>{{errorMessage}}</h3>
+
+    </div>
+</div>
+
+<script>
+    var btnClose = document.getElementById("btnClose");
+    var overlay = document.getElementById("overlay");
+
+    btnClose.addEventListener("click", closePopup);
+
+    function closePopup() {
+        overlay.style.display = "none";
+    }
+
+    document.addEventListener("keypress", function(event) {
+        overlay.style.display = 'none'
+    });
+</script>
 </body>
 
 <footer>

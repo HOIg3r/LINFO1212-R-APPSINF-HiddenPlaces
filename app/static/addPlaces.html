@@ -5,6 +5,7 @@
     <title>HiddenPlaces - Home</title>
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="addplaces.css">
+    <link rel="stylesheet" href="popup.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
           integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
           crossorigin=""/>
@@ -45,8 +46,19 @@
 </header>
 <h1>Add a Place</h1>
 <div id="map"></div>
+
+<div style="display:{{style}}" id="overlay" class="overlay">
+    <div id="popup-errorMessage" class="popup-errorMessage">
+        <h2>Error Message : <span class="btnClose" id="btnClose">&times;</span></h2>
+        <h3>{{errorMessage}}</h3>
+
+    </div>
+</div>
+
 <script>
+	/*Map*/
     var mymap = L.map('map').setView([50.70193521337628,4.4604133131427925], 6);
+
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
@@ -66,6 +78,22 @@
         lati.value = e.latlng.lat;
         long.value = e.latlng.lng;
     });
+
+    /*Popup*/
+
+    var btnClose = document.getElementById("btnClose");
+    var overlay = document.getElementById("overlay");
+
+    btnClose.addEventListener("click", closePopup);
+
+    function closePopup() {
+    overlay.style.display = "none";
+    }
+
+    document.addEventListener("keypress", function(event) {
+        overlay.style.display = 'none'
+    });
+
 </script>
     <form class="add_places" id="form" method="post" action="addplace">
         <!-- <input type="file" accept="image/*" required> !-->
