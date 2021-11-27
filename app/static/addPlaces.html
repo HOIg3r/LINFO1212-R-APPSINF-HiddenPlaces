@@ -22,7 +22,6 @@
         <a href="login.html">Log-in</a>
         <a href="places.html">Places</a>
         <a href="addPlaces.html">Add places</a>
-        <a href="map.html">map</a>
 
 
         <div class="search-box">
@@ -50,7 +49,7 @@
 <div style="display:{{style}}" id="overlay" class="overlay">
     <div id="popup-errorMessage" class="popup-errorMessage">
         <h2>Error Message : <span class="btnClose" id="btnClose">&times;</span></h2>
-        <h3>{{errorMessage}}</h3>
+        <h3 id="errormessage">{{errorMessage}}</h3>
 
     </div>
 </div>
@@ -95,19 +94,17 @@
     });
 
 </script>
-    <form class="add_places" id="form" method="post" action="addplace">
+    <form class="add_places" id="form" method="post" action="addplace" name="form">
         <!-- <input type="file" accept="image/*" required> !-->
         <input type="textarea" name="name" id="name" placeholder="Add a name" required>
         <textarea type="textarea" name="description" id="description" placeholder="Add a description" required></textarea>
-        <input id="lati" type="hidden" name="latitude" value="" size ="40" />
-        <input id="long" type="hidden" name="longitude" value="" size ="40" />
+        <input id="lati" type="hidden" name="latitude" value="" size ="40" required/>
+        <input id="long" type="hidden" name="longitude" value="" size ="40" required/>
         <button type="submit">Submit</button>
     </form>
 </body>
-<!--
 <footer>
     <p>&copy; 2021-2022 HiddenPlaces</p>
     <p>Tous droit réservé</p>
 </footer>
-!-->
 </html>

@@ -146,18 +146,20 @@ app.get('/addPlaces.html', function (req, res) {
     res.render('addPlaces.html',{username:"Anonyme"})
 })
 
-app.get('/map.html', function (req, res) {
+app.get('/places.html', function (req, res) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         else {
             const dbo = db.db('hiddenplaces-db');
             dbo.collection("geojson").find({}).toArray((err, doc) => {
-                var mapgeojson = JSON.stringify(doc);
-                if(req.session.username !== undefined){
-        			res.render('map.html',{username:req.session.username, mapgeojson: mapgeojson})
-   				}
-    			res.render('map.html',{username:"Anonyme", mapgeojson: mapgeojson})
-				})
+                dbo.collection("places").find({}).toArray((err, placelist) => {
+                    var mapgeojson = JSON.stringify(doc);
+                    if(req.session.username !== undefined){
+                        res.render('places.html',{username:req.session.username, mapgeojson: mapgeojson, placelist: placelist})
+                    }
+                    res.render('places.html',{username:"Anonyme", mapgeojson: mapgeojson, placelist: placelist})
+                    })
+                })
 
             }
 
@@ -168,7 +170,7 @@ app.get('/myProfile.html', function (req, res) {
     if(req.session.username !== undefined){
         res.render('myProfile.html',{username:req.session.username, fullname: req.session.fullname, email:req.session.email})
     }else{
-        req.session.errorMessage = "You are not connected, you cant access to your profile\n pls login or create a account."
+        req.session.errorMessage = "You are not connected, you cant access to your profile\n please login or create a account."
         res.redirect('index.html')
     }
 
@@ -179,35 +181,41 @@ app.get('/logout.html', function (req, res) {
     res.redirect('index.html')
 })
 app.post("/addplace", function (req, res, next) {
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        else {
-            const dbo = db.db('hiddenplaces-db');
-            const latlong = [parseFloat(req.body.longitude), parseFloat(req.body.latitude)];
-            dbo.collection("geojson").insertOne({
-                type: "Feature",
-                properties:{
+    if (req.body.latitude == "") {
+        req.session.errorMessage = "You need to pick a location to add a place"
+        res.render('addPlaces.html',{username:req.session.username, style:'block',errorMessage:req.session.errorMessage})
+        req.session.errorMessage = ''
+    } else {
+        MongoClient.connect(url, function (err, db) {
+            if (err) throw err;
+            else {
+                const dbo = db.db('hiddenplaces-db');
+                const latlong = [parseFloat(req.body.longitude), parseFloat(req.body.latitude)];
+                dbo.collection("geojson").insertOne({
+                    type: "Feature",
+                    properties: {
+                        name: req.body.name,
+                        popupContent: req.body.description
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: latlong
+                    }
+                }, (err, doc) => {
+                    if (err) throw err;
+                })
+                dbo.collection("places").insertOne({
                     name: req.body.name,
-                    popupContent: req.body.description
-                },
-                geometry: {
-                    type: "Point",
-                    coordinates: latlong
-                }
-            },(err, doc) => {
-                if (err) throw err;
-            })
-            dbo.collection("places").insertOne({
-                name: req.body.name,
-                coordinate: latlong,
-                rating: req.body.rating,
-                description: req.body.description,
-            },(err, doc) => {
-                if (err) throw err;
-            })
-            res.redirect("index.html")
-        }
-    })
+                    coordinate: latlong,
+                    rating: req.body.rating,
+                    description: req.body.description,
+                }, (err, doc) => {
+                    if (err) throw err;
+                })
+                res.redirect("index.html")
+            }
+        })
+    }
 });
 
 
