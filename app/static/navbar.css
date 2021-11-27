@@ -1,6 +1,9 @@
 body {
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 html {
     background-size: cover;
@@ -197,12 +200,9 @@ header {
 /*FOOTER*/
 
 footer {
-    position: fixed;
     text-align: center;
-    width: 100%;
-    left: 0;
-    bottom: 0;
     background-color: #2c2c31;
     color: #dad5d5;
+margin-top: auto;
 
 }
