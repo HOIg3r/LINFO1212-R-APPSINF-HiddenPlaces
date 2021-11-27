@@ -2,28 +2,53 @@
     display: flex;
 }
 
-.log-in {
+.container h2 {
     text-align: center;
+    font-family: Ubuntu;
+    color: black;
+    font-size: 25px;
+    text-decoration: underline;
+    margin-bottom: 7%;
 }
 
+.container button {
+    width: 100px;
+    height: 35px;
+    border-radius: 5px;
+    outline: none;
+    position: relative;
+    display: block;
+    margin: 1% auto 3% auto;
+    font-size: 17px;
+}
+
+.container button:hover {
+    color: white;
+    transition: 0.2s;
+    background-color: #44c004;
+}
+
+
+.log-in {
+    text-align: center;
+    background-color: white;
+    margin-top: 35px;
+    margin-left: auto;
+    margin-right: 40px;
+    padding: 10px 30px 30px;
+    border-radius: 25px;
+    border: 2px solid;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
 
 .sign-up {
     text-align: center;
-}
-
-
-.form_log-in {
-    padding-top: 20px;
-    padding-bottom: 40px;
-    margin: 100px;
-    text-decoration: none;
-    color: #000000;
-}
-
-.form_sign-up{
-    padding-top: 20px;
-    padding-bottom: 40px;
-    margin: 100px;
-    text-decoration: none;
-    color: #000000;
+    background-color: white;
+    margin-top: 35px;
+    margin-left: 40px;
+    margin-right: auto;
+    padding: 10px 30px 30px;
+    border-radius: 25px;
+    border: 2px solid;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 }
