@@ -224,7 +224,7 @@ app.post("/search", function (req, res, next) {
         let config = {
             tagTypes: ['art', 'ver', 'nom'],
             strictness: false,
-            minimumLength: 3,
+            minimumLength: 2,
             debug: false
         };
         var nlpToolsFr = new NlpjsTFr(req.body.input, config);
@@ -247,9 +247,11 @@ app.post("/search", function (req, res, next) {
         else {
             const dbo = db.db('hiddenplaces-db');
             dbo.collection("places").createIndex({name: "text"}).then(r => {
-                dbo.collection("places").find({"$text": {"$search": wordlist}}).toArray((err,placelist) => {
+                dbo.collection("places").find({"$text": {"$search": wordlist,"$caseSensitive": false,
+                        "$diacriticSensitive": false }}).toArray((err,placelist) => {
                     dbo.collection("geojson").createIndex({"properties.name": "text"}).then(r => {
-                        dbo.collection("geojson").find({"$text": {"$search": wordlist}}).toArray((err, doc) => {
+                        dbo.collection("geojson").find({"$text": {"$search": wordlist,"$caseSensitive": false,
+                                "$diacriticSensitive": false }}).toArray((err, doc) => {
                             if (err) {
                                 console.log(err)
                             } else {
