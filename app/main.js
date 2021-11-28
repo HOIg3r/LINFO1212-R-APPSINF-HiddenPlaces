@@ -249,20 +249,39 @@ app.post("/search", function (req, res, next) {
             dbo.collection("places").createIndex({name: "text"}).then(r => {
                 dbo.collection("places").find({"$text": {"$search": wordlist,"$caseSensitive": false,
                         "$diacriticSensitive": false }}).toArray((err,placelist) => {
-                    dbo.collection("geojson").createIndex({"properties.name": "text"}).then(r => {
-                        dbo.collection("geojson").find({"$text": {"$search": wordlist,"$caseSensitive": false,
-                                "$diacriticSensitive": false }}).toArray((err, doc) => {
-                            if (err) {
-                                console.log(err)
-                            } else {
-                                var mapgeojson = JSON.stringify(doc);
+                            if (placelist.length === 0) {
                                 if(req.session.username !== undefined){
-                                    res.render('places.html',{username:req.session.username, mapgeojson: mapgeojson, placelist: placelist})
+                                    res.render('index.html',{username:req.session.username, style:'block',errorMessage:"No place was found"})
                                 }
-                                res.render('places.html',{username:"Anonyme", mapgeojson: mapgeojson, placelist: placelist})
+                                res.render('index.html',{username:"Anonyme", style:'block',errorMessage:"No place was found"})
+                            } else {
+                                dbo.collection("geojson").createIndex({"properties.name": "text"}).then(r => {
+                                    dbo.collection("geojson").find({
+                                        "$text": {
+                                            "$search": wordlist, "$caseSensitive": false,
+                                            "$diacriticSensitive": false
+                                        }
+                                    }).toArray((err, doc) => {
+                                        if (err) {
+                                            console.log(err)
+                                        } else {
+                                            var mapgeojson = JSON.stringify(doc);
+                                            if (req.session.username !== undefined) {
+                                                res.render('places.html', {
+                                                    username: req.session.username,
+                                                    mapgeojson: mapgeojson,
+                                                    placelist: placelist
+                                                })
+                                            }
+                                            res.render('places.html', {
+                                                username: "Anonyme",
+                                                mapgeojson: mapgeojson,
+                                                placelist: placelist
+                                            })
+                                        }
+                                    })
+                                })
                             }
-                            })
-                        })
                     })
             })
         }
