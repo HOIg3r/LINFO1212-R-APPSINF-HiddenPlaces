@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>HiddenPlaces - Home</title>
+    <title>HiddenPlaces - Places</title>
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="places.css">
     <link rel="stylesheet" href="popup.css">
@@ -64,44 +64,44 @@
         overlay.style.display = "none";
     }
 
-    document.addEventListener("keypress", function(event) {
+    document.addEventListener("keypress", function (event) {
         overlay.style.display = 'none'
     });
 </script>
 <div class="container">
-<div id="map" class="child"></div>
+    <div id="map" class="child"></div>
     <script>
         /*Map*/
-    document.addEventListener("DOMContentLoaded", function() {
-        var mymap = L.map('map').setView([50.70193521337628, 4.4604133131427925], 8);
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            maxZoom: 18,
-            id: 'mapbox/streets-v11',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: 'pk.eyJ1IjoibGViZWxnZSIsImEiOiJja3djNjk0cXMwN241MnR0M292NGJqcDU5In0.-NAdVQ9n-CIrhhRDd1vv5w'
-        }).addTo(mymap);
-        var mapgeojson = "{{ mapgeojson }}"
-        mapgeojson = mapgeojson.replaceAll('&quot;', '"');
-        mapgeojson = '{"type": "FeatureCollection","features": ' + mapgeojson + '}'
-        mapgeojson = JSON.parse(mapgeojson);
+        document.addEventListener("DOMContentLoaded", function () {
+            var mymap = L.map('map').setView([50.70193521337628, 4.4604133131427925], 8);
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'pk.eyJ1IjoibGViZWxnZSIsImEiOiJja3djNjk0cXMwN241MnR0M292NGJqcDU5In0.-NAdVQ9n-CIrhhRDd1vv5w'
+            }).addTo(mymap);
+            var mapgeojson = "{{ mapgeojson }}"
+            mapgeojson = mapgeojson.replaceAll('&quot;', '"');
+            mapgeojson = '{"type": "FeatureCollection","features": ' + mapgeojson + '}'
+            mapgeojson = JSON.parse(mapgeojson);
 
-        function onEachFeature(feature, layer) {
-            if (feature.properties && feature.properties.popupContent) {
-                layer.bindPopup("<b>" + feature.properties.name + "</b>" + "<br>" + feature.properties.popupContent);
+            function onEachFeature(feature, layer) {
+                if (feature.properties && feature.properties.popupContent) {
+                    layer.bindPopup("<b>" + feature.properties.name + "</b>" + "<br>" + feature.properties.popupContent);
+                }
+                var tr = document.getElementById("tr_element");
+                tr.setAttribute("id", feature.properties.name);
+                tr.onclick = function () {
+                    mymap.flyTo([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], 12);
+                };
             }
-            var tr = document.getElementById("tr_element");
-            tr.setAttribute("id",feature.properties.name);
-            tr.onclick = function () {
-                mymap.flyTo([feature.geometry.coordinates[1],feature.geometry.coordinates[0]], 12);
-            };
-        }
 
-        L.geoJSON(mapgeojson, {
-            onEachFeature: onEachFeature,
-        }).addTo(mymap);
-    });
+            L.geoJSON(mapgeojson, {
+                onEachFeature: onEachFeature,
+            }).addTo(mymap);
+        });
         /*PopUp*/
         var btnClose = document.getElementById("btnClose");
         var overlay = document.getElementById("overlay");
@@ -112,26 +112,26 @@
             overlay.style.display = "none";
         }
 
-        document.addEventListener("keypress", function(event) {
+        document.addEventListener("keypress", function (event) {
             overlay.style.display = 'none'
         });
     </script>
-<div id="list" class="child">
-<table>
-    <tr>
-        <thead>
-        <th><h3>List of Places</h3></th>
-        </thead>
-    </tr>
-    <tbody>
-    {{#placelist}}
-    <tr id="tr_element">
-        <td><u><b>{{name}}</b></u><br>{{description}}</td>
-    </tr>
-    {{/placelist}}
-    </tbody>
-</table>
-</div>
+    <div id="list" class="child">
+        <table>
+            <tr>
+                <thead>
+                <th><h3>List of Places</h3></th>
+                </thead>
+            </tr>
+            <tbody>
+            {{#placelist}}
+            <tr id="tr_element">
+                <td><u><b>{{name}}</b></u><br>{{description}}</td>
+            </tr>
+            {{/placelist}}
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 

@@ -12,7 +12,7 @@ html {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    font-family: Ubuntu;
+    font-family: Ubuntu, sans-serif;
 }
 header {
     color: white;

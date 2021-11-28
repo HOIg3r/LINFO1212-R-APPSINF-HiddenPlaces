@@ -134,18 +134,13 @@ app.post('/signup', (req, res,) => {
 
 })
 
-app.get('/place.html', function (req, res) {
-    if(req.session.username !== undefined){
-        res.render('place.html',{username:req.session.username})
-    }
-    res.render('place.html',{username:"Anonyme"})
-})
 
 app.get('/addPlaces.html', function (req, res) {
     if(req.session.username !== undefined){
         res.render('addPlaces.html',{username:req.session.username})
     }
-    res.render('addPlaces.html',{username:"Anonyme"})
+    req.session.errorMessage = 'You should be connected to add a place\n Please login or sign-up'
+    res.redirect('index.html')
 })
 
 app.get('/places.html', function (req, res) {
@@ -172,7 +167,7 @@ app.get('/myProfile.html', function (req, res) {
     if(req.session.username !== undefined){
         res.render('myProfile.html',{username:req.session.username, fullname: req.session.fullname, email:req.session.email})
     }else{
-        req.session.errorMessage = "You are not connected, you cant access to your profile\n please login or create a account."
+        req.session.errorMessage = "You are not connected, you cant access to your profile. Please login or create a account."
         res.redirect('index.html')
     }
 
@@ -183,7 +178,7 @@ app.get('/logout.html', function (req, res) {
     res.redirect('index.html')
 })
 app.post("/addplace", function (req, res, next) {
-    if (req.body.latitude == "") {
+    if (req.body.latitude === "") {
         req.session.errorMessage = "You need to pick a location to add a place"
         res.render('addPlaces.html',{username:req.session.username, style:'block',errorMessage:req.session.errorMessage})
         req.session.errorMessage = ''
