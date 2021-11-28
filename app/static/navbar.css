@@ -142,14 +142,17 @@ header {
 /*DROPDOWN*/
 
 .username {
-    display: inline;
-    margin-left: 30px;
+    display: inline-block;
+    margin-top: 0%;
+    position: relative;
+    bottom: 16px;
+    margin-bottom: 0%;
 }
 
 .dropdown {
     float: right;
     overflow: hidden;
-    min-width:160px
+    min-width: 130px
 }
 
 
@@ -194,7 +197,7 @@ header {
 }
 
 .profile-picture {
-    padding: 4px 10px;
+    padding: 3px 10px;
 }
 
 /*FOOTER*/
@@ -203,6 +206,6 @@ footer {
     text-align: center;
     background-color: #2c2c31;
     color: #dad5d5;
-margin-top: auto;
+    margin-top: auto;
 
 }
