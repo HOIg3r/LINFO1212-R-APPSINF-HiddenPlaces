@@ -21,6 +21,7 @@
     "hogan": "^1.0.2",
     "https": "^1.0.0",
     "mongo-image-converter": "^1.0.2",
-    "mongodb": "^4.2.0"
+    "mongodb": "^4.2.0",
+    "nlp-js-tools-french": "^1.0.9"
   }
 }

@@ -9,6 +9,8 @@ let MongoClient = mongo.MongoClient;
 let url = 'mongodb://localhost:27017/';
 let https = require('https');
 let fs = require('fs');
+let NlpjsTFr = require('nlp-js-tools-french');
+
 
 //import hash algo and create salt and hash code
 let bcrypt = require('bcryptjs');
@@ -217,6 +219,53 @@ app.post("/addplace", function (req, res, next) {
         })
     }
 });
+app.post("/search", function (req, res, next) {
+    MongoClient.connect(url, function (err, db) {
+        let config = {
+            tagTypes: ['art', 'ver', 'nom'],
+            strictness: false,
+            minimumLength: 3,
+            debug: false
+        };
+        var nlpToolsFr = new NlpjsTFr(req.body.input, config);
+        var lemmatizedWords = nlpToolsFr.lemmatizer();
+        var wordlist = "";
+        if (lemmatizedWords.length === 1 && lemmatizedWords[0]["word"] === lemmatizedWords[0]["lemma"]) {
+            wordlist = lemmatizedWords[0]["word"];
+        } else {
+            for(const element of lemmatizedWords) {
+                if (element["word"] === element["lemma"]) {
+                    wordlist += element["word"] + " ";
+                } else {
+                    wordlist += element["word"] + " ";
+                    wordlist += element["lemma"] + " ";
+                }
+            }
+            wordlist = wordlist.slice(0,-1);
+        }
+        if (err) throw err;
+        else {
+            const dbo = db.db('hiddenplaces-db');
+            dbo.collection("places").createIndex({name: "text"}).then(r => {
+                dbo.collection("places").find({"$text": {"$search": wordlist}}).toArray((err,placelist) => {
+                    dbo.collection("geojson").createIndex({"properties.name": "text"}).then(r => {
+                        dbo.collection("geojson").find({"$text": {"$search": wordlist}}).toArray((err, doc) => {
+                            if (err) {
+                                console.log(err)
+                            } else {
+                                var mapgeojson = JSON.stringify(doc);
+                                if(req.session.username !== undefined){
+                                    res.render('places.html',{username:req.session.username, mapgeojson: mapgeojson, placelist: placelist})
+                                }
+                                res.render('places.html',{username:"Anonyme", mapgeojson: mapgeojson, placelist: placelist})
+                            }
+                            })
+                        })
+                    })
+            })
+        }
+    })
+});
 
 
 // Start the site
@@ -226,5 +275,5 @@ https.createServer({
     cert: fs.readFileSync('cert.pem'),
     passphrase: 'HiddenPlaces'
 }, app).listen(8080);
-console.log('---- Site: https://localhost:8080/index.html ----')
+console.log('---- Site: https://localhost:8080/index.html ----');
 
