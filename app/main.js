@@ -62,12 +62,18 @@ app.get('/index.html', function (req, res) {
 app.get('/login.html', function (req, res) {
     var connected = "You are already connected, please disconnect before login or sign-up a other account"
     if(req.session.username !== undefined){
-        res.render('login.html',{username:req.session.username,style:'block', errorMessage:connected})
+        req.session.errorMessage= "You are already connected, please disconnect before login or sign-up a other account"
+        res.redirect('index.html')
+    }else{
+        res.render('login.html',{username:"Anonyme"})
     }
-    res.render('login.html',{username:"Anonyme"})
 })
 
 app.post('/login', (req, res,) => {
+    if(req.session.username !== undefined){
+        console.log("here")
+        res.redirect('login.html')
+    }
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         else {
@@ -79,7 +85,6 @@ app.post('/login', (req, res,) => {
                     // Compare the password and the hashed password stocked in the DB
                     bcrypt.compare(req.body.login_password, doc.hashed_password, function (err, resBcrypt) {
                         if (resBcrypt) {
-                            console.log(doc)
                             req.session._id = doc._id
                             req.session.username = doc.username
                             req.session.fullname = doc.fullname
@@ -98,6 +103,9 @@ app.post('/login', (req, res,) => {
 })
 
 app.post('/signup', (req, res,) => {
+    if(req.session.username !== undefined){
+        res.redirect('login.html')
+    }
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         if (req.body.signup_password !== req.body.signup_confirmed_password) {
@@ -136,11 +144,15 @@ app.post('/signup', (req, res,) => {
 
 
 app.get('/addPlaces.html', function (req, res) {
+    console.log(req.session.username)
     if(req.session.username !== undefined){
+        console.log('here')
         res.render('addPlaces.html',{username:req.session.username})
+    }else{
+        req.session.errorMessage = 'You should be connected to add a place\n Please login or sign-up'
+        res.redirect('index.html')
     }
-    req.session.errorMessage = 'You should be connected to add a place\n Please login or sign-up'
-    res.redirect('index.html')
+
 })
 
 app.get('/places.html', function (req, res) {
