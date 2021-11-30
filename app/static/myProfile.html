@@ -48,7 +48,7 @@
         <p><span>Your fullname</span> : {{fullname}}</p>
         <p><span>Your Email</span> : {{email}}</p>
         <div id="change_info">
-            <form class="change_don" id="form_c" method="post" name="form_c">
+            <form class="change_don" id="form_c" method="post" name="form_c" action="change_data">
                 <input name="new_username" type="text" placeholder="new username" required>
                 <input name="new_email" type="email" placeholder="example@hotmail.com" required>
                 <input name="new_fullname" type="text" placeholder="new fullname" required>
@@ -62,7 +62,6 @@
         </div>
 
     </div>
-
 </div>
 
 <div style="display:{{style}}" id="overlay" class="overlay">

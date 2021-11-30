@@ -220,6 +220,28 @@ app.get('/myProfile.html', function (req, res) {
 
 })
 
+app.post('/change_data', function (req,res) {
+    MongoClient.connect(url,function(err,db){
+        if(err) throw err;
+        if (req.body.new_password !== req.body.new_confirmed_password) {
+            res.redirect('index.html')
+        } else{
+            const dbo = db.db('hiddenplaces-db');
+            dbo.collection('users').updateOne({
+                username: req.session.username,
+                email: req.session.email,
+                fullname:req.session.fullname,
+            },{
+                username: req.body.new_username,
+                email: req.body.new_email,
+                fullname:req.body.new_fullname,
+
+            })
+            res.redirect('index.html')
+        }
+    })
+})
+
 app.get('/logout.html', function (req, res) {
     req.session.destroy()
     res.redirect('index.html')
