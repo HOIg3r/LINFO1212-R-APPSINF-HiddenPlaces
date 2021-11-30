@@ -35,7 +35,7 @@ header {
     font-size: 17px;
 }
 
-.topnav a:hover, .dropdown:hover, .dropbtn, .dropbtn:focus {
+.topnav a:hover, .dropdown:hover{
     background-color: #ffc13b;
     color: black;
 }
@@ -152,11 +152,7 @@ header {
 .dropdown {
     float: right;
     overflow: hidden;
-    min-width: 130px
-}
-
-
-.dropdown .dropbtn {
+    min-width: 160px;
     height: 48px;
     width: 100px;
     cursor: pointer;
@@ -167,6 +163,7 @@ header {
     background-color: inherit;
     font-family: inherit;
 }
+
 
 .dropdown-content {
     margin-right: inherit;
