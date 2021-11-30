@@ -220,23 +220,25 @@ app.get('/myProfile.html', function (req, res) {
 
 })
 
-app.post('/change_data', function (req,res) {
-    MongoClient.connect(url,function(err,db){
-        if(err) throw err;
-        if (req.body.new_password !== req.body.new_confirmed_password) {
-            res.redirect('index.html')
-        } else{
+app.post('/changeData',function(req,res){
+    if (req.body.newPassword !== req.body.confirmNewPassword){
+        res.redirect('myProfile.html')
+    }
+    MongoClient.connect(url, function(err,db){
+        if (err) throw err;
+        else{
             const dbo = db.db('hiddenplaces-db');
             dbo.collection('users').updateOne({
                 username: req.session.username,
-                email: req.session.email,
-                fullname:req.session.fullname,
-            },{
-                username: req.body.new_username,
-                email: req.body.new_email,
-                fullname:req.body.new_fullname,
+                fullname: req.session.fullname,
+                email: req.session.email
+            },{$set:{
+                    username: req.body.newUsername,
+                    fullname: req.body.newFullname,
+                    email: req.body.newEmail,
+                    //TODO: Crypter password
+                }})
 
-            })
             res.redirect('index.html')
         }
     })
