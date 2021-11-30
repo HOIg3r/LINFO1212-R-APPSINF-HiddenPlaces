@@ -1,20 +1,26 @@
 // Import module
+
+//Module too run server
 let express = require('express');
 let session = require('express-session');
-let bodyParser = require('body-parser');
 let app = express();
+
+//Module to session, body form and cookie
+let bodyParser = require('body-parser');
 let consolidate = require('consolidate');
+
+//Module for the DB MongoDB
 let mongo = require('mongodb');
 let MongoClient = mongo.MongoClient;
 let url = 'mongodb://localhost:27017/';
+
+// Module for the SSL certificate
 let https = require('https');
 let fs = require('fs');
+
+// other module
 let NlpjsTFr = require('nlp-js-tools-french');
-
-
-//import hash algo and create salt and hash code
 let bcrypt = require('bcryptjs');
-
 
 
 // Create the Cookie settings
@@ -34,7 +40,7 @@ app.use(session({
 app.use(bodyParser.json({limit: '16mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '16mb', extended: true}))
 
-//use hogan and set the files
+//use hogan and set the files with HTML and CSS
 app.engine('html', consolidate.hogan);
 app.set('views', 'static');
 
@@ -42,36 +48,55 @@ app.set('views', 'static');
 //render the good html
 
 //TODO: errormessage
+//Send index.html, Send errormessage on a popup if error and connect the user if is connected with cookie
 app.get('/index.html', function (req, res) {
 
-    if (req.session.errorMessage === '' || req.session.errorMessage === undefined){
-        if(req.session.username !== undefined){
-            res.render('index.html',{username:req.session.username, style:'none'})
+    if (req.session.errorMessage === '' || req.session.errorMessage === undefined) {
+
+        if (req.session.username !== undefined) {
+            res.render('index.html', {
+                username: req.session.username,
+                style: 'none'
+            })
         }
-        res.render('index.html',{username:'Anonyme',style:'none'})
-    }else{
-        if(req.session.username !== undefined){
-            res.render('index.html',{username:req.session.username, style:'block',errorMessage:req.session.errorMessage})
+        res.render('index.html', {
+            username: 'Anonyme',
+            style: 'none'
+        })
+
+    } else {
+
+        if (req.session.username !== undefined) {
+            res.render('index.html', {
+                username: req.session.username,
+                style: 'block',
+                errorMessage: req.session.errorMessage
+            })
         }
-        res.render('index.html',{username:'Anonyme', style:'block', errorMessage:req.session.errorMessage})
+        res.render('index.html', {
+            username: 'Anonyme',
+            style: 'block',
+            errorMessage: req.session.errorMessage
+        })
+        //delete the errorMessage
         req.session.errorMessage = ''
     }
 
 })
 
 app.get('/login.html', function (req, res) {
-    var connected = "You are already connected, please disconnect before login or sign-up a other account"
-    if(req.session.username !== undefined){
-        req.session.errorMessage= "You are already connected, please disconnect before login or sign-up a other account"
+    if (req.session.username !== undefined) {
+        req.session.errorMessage = "You are already connected, please disconnect before login or sign-up a other account"
         res.redirect('index.html')
-    }else{
-        res.render('login.html',{username:"Anonyme"})
+    } else {
+        res.render('login.html', {
+            username: "Anonyme"
+        })
     }
 })
 
 app.post('/login', (req, res,) => {
-    if(req.session.username !== undefined){
-        console.log("here")
+    if (req.session.username !== undefined) {
         res.redirect('login.html')
     }
     MongoClient.connect(url, function (err, db) {
@@ -91,7 +116,6 @@ app.post('/login', (req, res,) => {
                             req.session.email = doc.email
                             req.session.errorMessage = "";
                             res.redirect('index.html')
-
                         } else {
                             res.redirect('login.html')
                         }
@@ -103,7 +127,7 @@ app.post('/login', (req, res,) => {
 })
 
 app.post('/signup', (req, res,) => {
-    if(req.session.username !== undefined){
+    if (req.session.username !== undefined) {
         res.redirect('login.html')
     }
     MongoClient.connect(url, function (err, db) {
@@ -144,11 +168,11 @@ app.post('/signup', (req, res,) => {
 
 
 app.get('/addPlaces.html', function (req, res) {
-    console.log(req.session.username)
-    if(req.session.username !== undefined){
-        console.log('here')
-        res.render('addPlaces.html',{username:req.session.username})
-    }else{
+    if (req.session.username !== undefined) {
+        res.render('addPlaces.html', {
+            username: req.session.username
+        })
+    } else {
         req.session.errorMessage = 'You should be connected to add a place\n Please login or sign-up'
         res.redirect('index.html')
     }
@@ -163,22 +187,32 @@ app.get('/places.html', function (req, res) {
             dbo.collection("geojson").find({}).toArray((err, doc) => {
                 dbo.collection("places").find({}).toArray((err, placelist) => {
                     var mapgeojson = JSON.stringify(doc);
-                    if(req.session.username !== undefined){
-                        res.render('places.html',{username:req.session.username, mapgeojson: mapgeojson, placelist: placelist})
+                    if (req.session.username !== undefined) {
+                        res.render('places.html', {
+                            username: req.session.username,
+                            mapgeojson: mapgeojson,
+                            placelist: placelist
+                        })
                     }
-                    res.render('places.html',{username:"Anonyme", mapgeojson: mapgeojson, placelist: placelist})
+                    res.render('places.html', {
+                        username: "Anonyme",
+                        mapgeojson: mapgeojson,
+                        placelist: placelist
                     })
                 })
-
-            }
-
-        })
-    });
+            })
+        }
+    })
+});
 
 app.get('/myProfile.html', function (req, res) {
-    if(req.session.username !== undefined){
-        res.render('myProfile.html',{username:req.session.username, fullname: req.session.fullname, email:req.session.email})
-    }else{
+    if (req.session.username !== undefined) {
+        res.render('myProfile.html', {
+            username: req.session.username,
+            fullname: req.session.fullname,
+            email: req.session.email
+        })
+    } else {
         req.session.errorMessage = "You are not connected, you cant access to your profile. Please login or create a account."
         res.redirect('index.html')
     }
@@ -189,10 +223,15 @@ app.get('/logout.html', function (req, res) {
     req.session.destroy()
     res.redirect('index.html')
 })
+
 app.post("/addplace", function (req, res, next) {
     if (req.body.latitude === "") {
         req.session.errorMessage = "You need to pick a location to add a place"
-        res.render('addPlaces.html',{username:req.session.username, style:'block',errorMessage:req.session.errorMessage})
+        res.render('addPlaces.html', {
+            username: req.session.username,
+            style: 'block',
+            errorMessage: req.session.errorMessage
+        })
         req.session.errorMessage = ''
     } else {
         MongoClient.connect(url, function (err, db) {
@@ -226,6 +265,7 @@ app.post("/addplace", function (req, res, next) {
         })
     }
 });
+
 app.post("/search", function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         let config = {
@@ -240,7 +280,7 @@ app.post("/search", function (req, res, next) {
         if (lemmatizedWords.length === 1 && lemmatizedWords[0]["word"] === lemmatizedWords[0]["lemma"]) {
             wordlist = lemmatizedWords[0]["word"];
         } else {
-            for(const element of lemmatizedWords) {
+            for (const element of lemmatizedWords) {
                 if (element["word"] === element["lemma"]) {
                     wordlist += element["word"] + " ";
                 } else {
@@ -248,48 +288,60 @@ app.post("/search", function (req, res, next) {
                     wordlist += element["lemma"] + " ";
                 }
             }
-            wordlist = wordlist.slice(0,-1);
+            wordlist = wordlist.slice(0, -1);
         }
         if (err) throw err;
         else {
             const dbo = db.db('hiddenplaces-db');
             dbo.collection("places").createIndex({name: "text"}).then(r => {
-                dbo.collection("places").find({"$text": {"$search": wordlist,"$caseSensitive": false,
-                        "$diacriticSensitive": false }}).toArray((err,placelist) => {
-                            if (placelist.length === 0) {
-                                if(req.session.username !== undefined){
-                                    res.render('index.html',{username:req.session.username, style:'block',errorMessage:"No place was found"})
+                dbo.collection("places").find({
+                    "$text": {
+                        "$search": wordlist, "$caseSensitive": false,
+                        "$diacriticSensitive": false
+                    }
+                }).toArray((err, placelist) => {
+                    if (placelist.length === 0) {
+                        if (req.session.username !== undefined) {
+                            res.render('index.html', {
+                                username: req.session.username,
+                                style: 'block',
+                                errorMessage: "No place was found"
+                            })
+                        }
+                        res.render('index.html', {
+                            username: "Anonyme",
+                            style: 'block',
+                            errorMessage: "No place was found"
+                        })
+                    } else {
+                        dbo.collection("geojson").createIndex({"properties.name": "text"}).then(r => {
+                            dbo.collection("geojson").find({
+                                "$text": {
+                                    "$search": wordlist, "$caseSensitive": false,
+                                    "$diacriticSensitive": false
                                 }
-                                res.render('index.html',{username:"Anonyme", style:'block',errorMessage:"No place was found"})
-                            } else {
-                                dbo.collection("geojson").createIndex({"properties.name": "text"}).then(r => {
-                                    dbo.collection("geojson").find({
-                                        "$text": {
-                                            "$search": wordlist, "$caseSensitive": false,
-                                            "$diacriticSensitive": false
-                                        }
-                                    }).toArray((err, doc) => {
-                                        if (err) {
-                                            console.log(err)
-                                        } else {
-                                            var mapgeojson = JSON.stringify(doc);
-                                            if (req.session.username !== undefined) {
-                                                res.render('places.html', {
-                                                    username: req.session.username,
-                                                    mapgeojson: mapgeojson,
-                                                    placelist: placelist
-                                                })
-                                            }
-                                            res.render('places.html', {
-                                                username: "Anonyme",
-                                                mapgeojson: mapgeojson,
-                                                placelist: placelist
-                                            })
-                                        }
+                            }).toArray((err, doc) => {
+                                if (err) {
+                                    console.log(err)
+                                } else {
+                                    var mapgeojson = JSON.stringify(doc);
+                                    if (req.session.username !== undefined) {
+                                        res.render('places.html', {
+                                            username: req.session.username,
+                                            mapgeojson: mapgeojson,
+                                            placelist: placelist
+                                        })
+                                    }
+                                    res.render('places.html', {
+                                        username: "Anonyme",
+                                        mapgeojson: mapgeojson,
+                                        placelist: placelist
                                     })
-                                })
-                            }
-                    })
+                                }
+                            })
+                        })
+                    }
+                })
             })
         }
     })
