@@ -1,5 +1,19 @@
 # LINFO1212 Groupe R Projet Final
 
+##TODO list
+
+- [ ] Ajouter des commentaire un peu partouts 
+- [ ] rendre le code lisible
+- [ ] commentaires
+- [ ] rating système
+- [ ] finir README
+- [ ] Rapport
+- [ ] Supprimer compte
+- [ ] creer BD de base
+- [ ] Fix dropdown
+- [ ] Welcome message
+- [ ] Logo
+
 ### Table des matières
 
 <ol>
