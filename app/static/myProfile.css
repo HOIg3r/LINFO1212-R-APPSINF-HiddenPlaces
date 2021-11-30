@@ -1,0 +1,26 @@
+
+h1 {
+    margin-left: 20px;
+    font-family: Ubuntu;
+    color: white;
+    font-size: 30px;
+    text-decoration: underline;
+    margin-bottom: 2%;
+}
+
+#info {
+    color: lightgray;
+    margin-left: 20px;
+}
+
+span {
+    color: white;
+    text-decoration: underline;
+}
+
+button {
+    width: 180px;
+    height: 25px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
