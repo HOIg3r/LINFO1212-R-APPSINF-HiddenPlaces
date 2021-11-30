@@ -5,3 +5,15 @@
   "commentaries": "",
   "description": ""
 }
+[
+  {
+    "_id":"61a376e3355b90fe88dcff70",
+    "type":"Feature",
+    "properties":{"name":"L'Atomium","popupContent":"L’Atomium est un monument de Bruxelles, en Belgique, construit à l'occasion de l'Exposition universelle de 1958 et représentant la maille conventionnelle du cristal de fer agrandie 165 milliards de fois. Il est situé à Laeken sur le plateau du Heysel oùeut lieu cette exposition."},
+      "geometry":{"type":"Point","coordinates":[4.341539382803604,50.894882950245474]}},{"_id":"61a37750355b90fe88dcff72","type":"Feature","properties":{
+  "name":"La Tour Eiffel","popupContent":"La tour Eiffel est une tour de fer puddlé de 324 mètres de hauteur située à Paris, à l’extrémité nord-ouest du parc du Champ-de-Mars en b
+  ordure de la Seine dans le 7ᵉ arrondissement. Son adresse officielle est 5, avenue Anatole-France."},"geometry":{"type":"Point","coordinates":[2.294516086512886,48.8582266489705
+]}},{"_id":"61a377f9355b90fe88dcff74","type":"Feature","properties":{"name":"Big Ben","popupContent":"Big Ben est le surnom de la grande cloche de 13,5 tonnes se trouvant au som
+  met de la tour Élisabeth (Elizabeth Tower), la tour horloge du palais de Westminster, qui est le siège du Parlement britannique (Houses of Parliament), à Londres."},"geometry":{
+  "type":"Point","coordinates":[-0.12455749518267113,51.5006938218723]}},{"_id":"61a625361235d9123708b020","type":"Feature","properties":{"name":"fdfhd","popupContent":"fdh\r\ngfh
+  fgh\r\nfghfghfghfhggf"},"geometry":{"type":"Point","coordinates":[4.62304674088955,49.60762508783668]}}]

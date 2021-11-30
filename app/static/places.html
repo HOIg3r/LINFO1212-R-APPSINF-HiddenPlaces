@@ -83,9 +83,15 @@
                 accessToken: 'pk.eyJ1IjoibGViZWxnZSIsImEiOiJja3djNjk0cXMwN241MnR0M292NGJqcDU5In0.-NAdVQ9n-CIrhhRDd1vv5w'
             }).addTo(mymap);
             var mapgeojson = "{{ mapgeojson }}"
+            console.log(mapgeojson);
             mapgeojson = mapgeojson.replaceAll('&quot;', '"');
+            mapgeojson = mapgeojson.replaceAll('\n', '\\n');
+            mapgeojson = mapgeojson.replaceAll('\r', '\\r');
+            console.log(mapgeojson);
             mapgeojson = '{"type": "FeatureCollection","features": ' + mapgeojson + '}'
+            console.log(mapgeojson);
             mapgeojson = JSON.parse(mapgeojson);
+            console.log(mapgeojson);
 
             function onEachFeature(feature, layer) {
                 if (feature.properties && feature.properties.popupContent) {

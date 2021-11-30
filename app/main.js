@@ -187,6 +187,7 @@ app.get('/places.html', function (req, res) {
             dbo.collection("geojson").find({}).toArray((err, doc) => {
                 dbo.collection("places").find({}).toArray((err, placelist) => {
                     var mapgeojson = JSON.stringify(doc);
+                    console.log(mapgeojson);
                     if (req.session.username !== undefined) {
                         res.render('places.html', {
                             username: req.session.username,
