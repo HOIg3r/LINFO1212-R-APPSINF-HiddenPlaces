@@ -243,6 +243,20 @@ app.post('/changeData',function(req,res){
     })
 })
 
+app.get('/delete',function (req,res){
+    MongoClient.connect(url, function(err,db){
+        if (err) throw err;
+        else {
+            const dbo = db.db('hiddenplaces-db');
+            dbo.collection('users').remove({
+                username: req.session.username
+            })
+            req.session.destroy()
+            res.redirect('index.html')
+        }
+    })
+})
+
 app.get('/logout.html', function (req, res) {
     req.session.destroy()
     res.redirect('index.html')
@@ -373,6 +387,7 @@ app.post("/search", function (req, res, next) {
         }
     })
 });
+
 app.post("/addComment", function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
