@@ -187,12 +187,13 @@ app.get('/places.html', function (req, res) {
             dbo.collection("geojson").find({}).toArray((err, doc) => {
                 dbo.collection("places").find({}).toArray((err, placelist) => {
                     var mapgeojson = JSON.stringify(doc);
-                    console.log(mapgeojson);
+                    var placelistJSON = JSON.stringify(placelist);
                     if (req.session.username !== undefined) {
                         res.render('places.html', {
                             username: req.session.username,
                             mapgeojson: mapgeojson,
-                            placelist: placelist
+                            placelist: placelist,
+                            placelistJSON: placelist
                         })
                     }
                     res.render('places.html', {
@@ -244,7 +245,8 @@ app.post("/addplace", function (req, res, next) {
                     type: "Feature",
                     properties: {
                         name: req.body.name,
-                        popupContent: req.body.description
+                        popupContent: req.body.description,
+                        author: req.session.username
                     },
                     geometry: {
                         type: "Point",
@@ -258,6 +260,8 @@ app.post("/addplace", function (req, res, next) {
                     coordinate: latlong,
                     rating: req.body.rating,
                     description: req.body.description,
+                    author: req.session.username,
+                    commentaries: []
                 }, (err, doc) => {
                     if (err) throw err;
                 })
@@ -344,6 +348,22 @@ app.post("/search", function (req, res, next) {
                     }
                 })
             })
+        }
+    })
+});
+app.post("/addComment", function (req, res, next) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        else {
+            const dbo = db.db('hiddenplaces-db');
+            console.log(req.body.commentId.value)
+            dbo.collection("places").find({name: req.body.commentId}).toArray((err, place) => {
+                console.log(place);
+                dbo.collection("places").updateOne(place[0], { $push: { commentaries: req.body.comment }}, function(err, res) {
+                    if (err) throw err;
+                });
+            })
+            res.redirect("places.html");
         }
     })
 });

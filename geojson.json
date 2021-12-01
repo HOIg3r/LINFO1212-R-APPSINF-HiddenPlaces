@@ -2,7 +2,8 @@
   "type": "Feature",
   "properties": {
     "name": "",
-    "popupContent": ""
+    "popupContent": "",
+    "author" : ""
   },
   "geometry": {
     "type": "Point",

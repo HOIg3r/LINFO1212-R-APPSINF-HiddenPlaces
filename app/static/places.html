@@ -83,24 +83,33 @@
                 accessToken: 'pk.eyJ1IjoibGViZWxnZSIsImEiOiJja3djNjk0cXMwN241MnR0M292NGJqcDU5In0.-NAdVQ9n-CIrhhRDd1vv5w'
             }).addTo(mymap);
             var mapgeojson = "{{ mapgeojson }}"
-            console.log(mapgeojson);
-            mapgeojson = mapgeojson.replaceAll('&quot;', '"');
-            mapgeojson = mapgeojson.replaceAll('\n', '\\n');
-            mapgeojson = mapgeojson.replaceAll('\r', '\\r');
-            console.log(mapgeojson);
-            mapgeojson = '{"type": "FeatureCollection","features": ' + mapgeojson + '}'
-            console.log(mapgeojson);
+            mapgeojson = '{"type": "FeatureCollection","features": ' + mapgeojson.replaceAll('&quot;', '"').replaceAll('\n', '\\n').replaceAll('\r', '\\r') + '}';
             mapgeojson = JSON.parse(mapgeojson);
-            console.log(mapgeojson);
 
             function onEachFeature(feature, layer) {
                 if (feature.properties && feature.properties.popupContent) {
                     layer.bindPopup("<b>" + feature.properties.name + "</b>" + "<br>" + feature.properties.popupContent);
                 }
+                feature.properties.name = feature.properties.name.replaceAll("&#39;", "'");
                 var tr = document.getElementById("tr_element");
                 tr.setAttribute("id", feature.properties.name);
                 tr.onclick = function () {
                     mymap.flyTo([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], 12);
+                    var newcomment = document.getElementById("new_comment");
+                    var commentId = document.getElementById("commentId");
+                    var trcomment = document.getElementById(feature.properties.name + "comment");
+                    var className = feature.properties.name;
+                    var trcommentClass = document.getElementsByClassName("tr_comment");
+                    for (let i = 0; i < trcommentClass.length; i++) {
+                        trcommentClass[i].style.display = "none";
+
+                    }
+                    className = className.replaceAll("&#39;", "'");
+                    newcomment.setAttribute("class", className);
+                    commentId.setAttribute("class", className +"Class");
+                    commentId.setAttribute("value", className);
+                    trcomment.style.display = 'table-caption';
+
                 };
             }
 
@@ -132,13 +141,41 @@
             <tbody>
             {{#placelist}}
             <tr id="tr_element">
-                <td><u><b>{{name}}</b></u><br>{{description}}</td>
+                <td id="td_element"><u><b>{{name}}</b></u><br>{{description}}</td>
             </tr>
             {{/placelist}}
             </tbody>
         </table>
     </div>
 </div>
+<form method="post" action="addComment">
+<table>
+    <thead>
+    <th><h2 class="h2comment">Comments</h2></th>
+    </thead>
+    <tbody>
+    <tr id="new_comment" class="new_comment">
+        <td>
+            <input type="text" placeholder="Write a comment..." name="comment" id=" " class="comment">
+            <input id="commentId" type="hidden" name="commentId" value="" class="commentId"/>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</form>
+<table>
+    <tbody>
+        {{#placelist}}
+            <tr class="tr_comment" id="{{name}}comment">
+                <td>
+                {{#commentaries}}
+                <textarea readonly>{{.}}</textarea>
+                {{/commentaries}}
+                </td>
+            </tr>
+    {{/placelist}}
+    </tbody>
+</table>
 </body>
 
 <footer>
