@@ -96,6 +96,7 @@
                 tr.onclick = function () {
                     mymap.flyTo([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], 12);
                     var newcomment = document.getElementById("new_comment");
+                    var h2comment = document.getElementById("h2comment")
                     var commentId = document.getElementById("commentId");
                     var trcomment = document.getElementById(feature.properties.name + "comment");
                     var className = feature.properties.name;
@@ -104,6 +105,8 @@
                         trcommentClass[i].style.display = "none";
 
                     }
+                    newcomment.style.display = "block";
+                    h2comment.style.display = "block";
                     className = className.replaceAll("&#39;", "'");
                     newcomment.setAttribute("class", className);
                     commentId.setAttribute("class", className +"Class");
@@ -151,7 +154,7 @@
 <form method="post" action="addComment">
 <table>
     <thead>
-    <th><h2 class="h2comment">Comments</h2></th>
+    <th><h2 id="h2comment">Comments</h2></th>
     </thead>
     <tbody>
     <tr id="new_comment" class="new_comment">
@@ -169,7 +172,9 @@
             <tr class="tr_comment" id="{{name}}comment">
                 <td>
                 {{#commentaries}}
-                <textarea readonly>{{.}}</textarea>
+                    {{#.}}
+                <div class="textcomment"><p id="divComment">{{comment}}</p><p id="usernameComment">{{commentAuthor}}</p></div>
+                    {{/.}}
                 {{/commentaries}}
                 </td>
             </tr>

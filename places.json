@@ -2,7 +2,10 @@
   "name": "",
   "coordinate": "",
   "rating": 0,
-  "commentaries": "",
-  "description": [],
+  "commentaries": [{
+    "commentAuthor": "",
+    "comment": ""
+  }],
+  "description": "",
   "author": ""
 }
