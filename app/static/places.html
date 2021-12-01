@@ -144,7 +144,7 @@
             <tbody>
             {{#placelist}}
             <tr id="tr_element">
-                <td id="td_element"><u><b>{{name}}</b></u><br>{{description}}</td>
+                <td id="td_element"><u><b>{{name}}</b></u><p id="placeAuthor">By {{author}}</p><br>{{description}}</td>
             </tr>
             {{/placelist}}
             </tbody>
@@ -173,7 +173,7 @@
                 <td>
                 {{#commentaries}}
                     {{#.}}
-                <div class="textcomment"><p id="divComment">{{comment}}</p><p id="usernameComment">{{commentAuthor}}</p></div>
+                <div class="textcomment"><p id="divComment">{{comment}}</p><p id="usernameComment">By {{commentAuthor}}</p></div>
                     {{/.}}
                 {{/commentaries}}
                 </td>

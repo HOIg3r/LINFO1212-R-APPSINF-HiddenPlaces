@@ -383,13 +383,10 @@ app.post("/addComment", function (req, res, next) {
         if (err) throw err;
         else {
             const dbo = db.db('hiddenplaces-db');
-            if (req.session.username !== undefined) {
-                var authorString = "By " + req.session.username;
-            } else {
-                var authorString = "By Anonyme";
-            }
+            if (req.session.username === undefined) {
+                req.session.username = "Anonyme";
             dbo.collection("places").find({name: req.body.commentId}).toArray((err, place) => {
-                dbo.collection("places").updateOne(place[0], { $push: { commentaries: {comment: req.body.comment, commentAuthor: authorString}}}, function(err, res) {
+                dbo.collection("places").updateOne(place[0], { $push: { commentaries: {comment: req.body.comment, commentAuthor: req.session.username}}}, function(err, res) {
                     if (err) throw err;
                 });
             })
