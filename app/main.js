@@ -356,9 +356,7 @@ app.post("/addComment", function (req, res, next) {
         if (err) throw err;
         else {
             const dbo = db.db('hiddenplaces-db');
-            console.log(req.body.commentId.value)
             dbo.collection("places").find({name: req.body.commentId}).toArray((err, place) => {
-                console.log(place);
                 dbo.collection("places").updateOne(place[0], { $push: { commentaries: req.body.comment }}, function(err, res) {
                     if (err) throw err;
                 });
