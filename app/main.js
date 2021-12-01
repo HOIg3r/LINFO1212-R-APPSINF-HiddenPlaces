@@ -90,9 +90,12 @@ app.get('/login.html', function (req, res) {
         res.redirect('index.html')
     } else {
         res.render('login.html', {
-            username: "Anonyme"
+            username: "Anonyme",
+            style: 'block',
+            errorMessage: req.session.errorMessage
         })
     }
+    req.session.errorMessage = '';
 })
 
 app.post('/login', (req, res,) => {
@@ -174,7 +177,7 @@ app.get('/addPlaces.html', function (req, res) {
         })
     } else {
         req.session.errorMessage = 'You should be connected to add a place\n Please login or sign-up'
-        res.redirect('index.html')
+        res.redirect('login.html')
     }
 
 })
