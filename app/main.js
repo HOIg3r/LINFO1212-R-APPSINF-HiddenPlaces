@@ -89,13 +89,8 @@ app.get('/login.html', function (req, res) {
         req.session.errorMessage = "You are already connected, please disconnect before login or sign-up a other account"
         res.redirect('index.html')
     } else {
-        res.render('login.html', {
-            username: "Anonyme",
-            style: 'block',
-            errorMessage: req.session.errorMessage
-        })
+            res.render('login.html',{username : "Anonyme"})
     }
-    req.session.errorMessage = '';
 })
 
 app.post('/login', (req, res,) => {
@@ -177,7 +172,7 @@ app.get('/addPlaces.html', function (req, res) {
         })
     } else {
         req.session.errorMessage = 'You should be connected to add a place\n Please login or sign-up'
-        res.redirect('login.html')
+        res.redirect('index.html')
     }
 
 })
@@ -384,9 +379,12 @@ app.post("/addComment", function (req, res, next) {
         else {
             const dbo = db.db('hiddenplaces-db');
             if (req.session.username === undefined) {
-                req.session.username = "Anonyme";
+                var username = "Anonyme";
+            } else {
+                var username = req.session.username;
+            }
             dbo.collection("places").find({name: req.body.commentId}).toArray((err, place) => {
-                dbo.collection("places").updateOne(place[0], { $push: { commentaries: {comment: req.body.comment, commentAuthor: req.session.username}}}, function(err, res) {
+                dbo.collection("places").updateOne(place[0], { $push: { commentaries: {comment: req.body.comment, commentAuthor: username}}}, function(err, res) {
                     if (err) throw err;
                 });
             })
