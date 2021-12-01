@@ -221,6 +221,30 @@ app.get('/myProfile.html', function (req, res) {
 
 })
 
+app.post('/changeData',function(req,res){
+    if (req.body.newPassword !== req.body.confirmNewPassword){
+        res.redirect('myProfile.html')
+    }
+    MongoClient.connect(url, function(err,db){
+        if (err) throw err;
+        else{
+            const dbo = db.db('hiddenplaces-db');
+            dbo.collection('users').updateOne({
+                username: req.session.username,
+                fullname: req.session.fullname,
+                email: req.session.email
+            },{$set:{
+                    username: req.body.newUsername,
+                    fullname: req.body.newFullname,
+                    email: req.body.newEmail,
+                    //TODO: Crypter password
+                }})
+
+            res.redirect('index.html')
+        }
+    })
+})
+
 app.get('/logout.html', function (req, res) {
     req.session.destroy()
     res.redirect('index.html')

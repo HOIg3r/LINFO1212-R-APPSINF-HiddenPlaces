@@ -1,0 +1,31 @@
+
+
+.container {
+    margin-left: 20px;
+}
+#info {
+    color: lightgray;
+}
+
+h1 {
+    font-family: Ubuntu;
+    color: white;
+    font-size: 30px;
+    text-decoration: underline;
+    margin-bottom: 2%;
+}
+
+span {
+    color: white;
+    text-decoration: underline;
+}
+
+button {
+    width: 180px;
+    height: 23px;
+    margin-bottom: 10px;
+}
+
+#changedon {
+    margin-bottom: 30px;
+}

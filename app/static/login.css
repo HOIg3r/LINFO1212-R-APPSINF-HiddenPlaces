@@ -1,4 +1,4 @@
-.container{
+.container {
     display: flex;
 }
 
@@ -28,6 +28,34 @@
     background-color: #44c004;
 }
 
+
+.container h2 {
+    text-decoration: underline;
+}
+
+.container input {
+    height: 20px;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 7px;
+}
+
+.container button {
+    width: 100px;
+    height: 35px;
+    border-radius: 5px;
+    outline: none;
+    position: relative;
+    display: block;
+    margin: 1% auto 3% auto;
+    font-size: 17px;
+}
+
+.container button:hover {
+    color: white;
+    transition: 0.2s;
+    background-color: #44c004;
+}
 
 .log-in {
     text-align: center;
