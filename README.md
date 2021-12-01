@@ -4,13 +4,13 @@
 
 - [ ] Ajouter des commentaire un peu partouts 
 - [ ] rendre le code lisible
-- [ ] commentaires
+- [X] commentaires
 - [ ] rating système
 - [ ] finir README
 - [ ] Rapport
 - [ ] Supprimer compte
 - [ ] creer BD de base
-- [ ] Fix dropdown
+- [X] Fix dropdown
 - [ ] Welcome message
 - [ ] Logo
 
