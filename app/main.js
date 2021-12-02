@@ -48,7 +48,7 @@ app.set('views', 'static');
 
 //render the good html
 
-//TODO: errormessage
+
 //Send index.html, Send errormessage on a popup if error and connect the user if is connected with cookie
 app.get('/index.html', function (req, res) {
 
@@ -59,11 +59,12 @@ app.get('/index.html', function (req, res) {
                 username: req.session.username,
                 style: 'none'
             })
+        } else {
+            res.render('index.html', {
+                username: 'Anonyme',
+                style: 'none'
+            })
         }
-        res.render('index.html', {
-            username: 'Anonyme',
-            style: 'none'
-        })
 
     } else {
 
@@ -73,18 +74,20 @@ app.get('/index.html', function (req, res) {
                 style: 'block',
                 errorMessage: req.session.errorMessage
             })
+        } else {
+            res.render('index.html', {
+                username: 'Anonyme',
+                style: 'block',
+                errorMessage: req.session.errorMessage
+            })
+            //delete the errorMessage
+            req.session.errorMessage = ''
         }
-        res.render('index.html', {
-            username: 'Anonyme',
-            style: 'block',
-            errorMessage: req.session.errorMessage
-        })
-        //delete the errorMessage
-        req.session.errorMessage = ''
     }
 
 })
 
+// send login.html, redirect on index.html whit errormessage popup if user already connected
 app.get('/login.html', function (req, res) {
     if (req.session.username !== undefined) {
         req.session.errorMessage = "You are already connected, please disconnect before login or sign-up a other account"
@@ -94,6 +97,7 @@ app.get('/login.html', function (req, res) {
     }
 })
 
+// check if user in db and log it if exist, if not send login.html and don't connect
 app.post('/login', (req, res,) => {
     if (req.session.username !== undefined) {
         res.redirect('login.html')
@@ -125,6 +129,7 @@ app.post('/login', (req, res,) => {
     })
 })
 
+// sinup user if all input are correct
 app.post('/signup', (req, res,) => {
     if (req.session.username !== undefined) {
         res.redirect('login.html')
@@ -165,7 +170,7 @@ app.post('/signup', (req, res,) => {
 
 })
 
-
+// sned addPlace only if connected
 app.get('/addPlaces.html', function (req, res) {
     if (req.session.username !== undefined) {
         res.render('addPlaces.html', {
@@ -178,104 +183,7 @@ app.get('/addPlaces.html', function (req, res) {
 
 })
 
-app.get('/places.html', function (req, res) {
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        else {
-            const dbo = db.db('hiddenplaces-db');
-            dbo.collection("geojson").find({}).toArray((err, doc) => {
-                dbo.collection("places").find({}).toArray((err, placelist) => {
-                    var mapgeojson = JSON.stringify(doc);
-                    var placelistJSON = JSON.stringify(placelist);
-                    if (req.session.username !== undefined) {
-                        res.render('places.html', {
-                            username: req.session.username,
-                            mapgeojson: mapgeojson,
-                            placelist: placelist,
-                            placelistJSON: placelist
-                        })
-                    }
-                    res.render('places.html', {
-                        username: "Anonyme",
-                        mapgeojson: mapgeojson,
-                        placelist: placelist
-                    })
-                })
-            })
-        }
-    })
-});
-
-app.get('/myProfile.html', function (req, res) {
-    if (req.session.username !== undefined) {
-        res.render('myProfile.html', {
-            username: req.session.username,
-            fullname: req.session.fullname,
-            email: req.session.email,
-        })
-    } else {
-        req.session.errorMessage = "You are not connected, you cant access to your profile. Please login or create a account."
-        res.redirect('index.html')
-    }
-
-})
-
-app.post('/changeData', function (req, res) {
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        if (req.body.newPassword !== req.body.confirmNewPassword) {
-            res.redirect('myProfile.html')
-        } else {
-
-            const dbo = db.db('hiddenplaces-db');
-
-            bcrypt.genSalt(10, function (err, salt) {
-                bcrypt.hash(req.body.newPassword, salt, function (err, hash) {
-
-                    dbo.collection('users').updateOne({
-                        _id: ObjectId(req.session._id),
-                        username: req.session.username,
-                        fullname: req.session.fullname,
-                        email: req.session.email,
-                    }, {
-                        $set: {
-                            username: req.body.newUsername,
-                            hashed_password:hash,
-                            fullname: req.body.newFullname,
-                            email: req.body.newEmail,
-                        }
-                    })
-
-
-                    req.session.username = req.body.newUsername
-                    req.session.fullname = req.body.newFullname
-                    req.session.email = req.body.newEmail
-                    res.redirect('index.html')
-                })
-            })
-        }
-    })
-})
-
-app.get('/delete', function (req, res) {
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        else {
-            const dbo = db.db('hiddenplaces-db');
-            dbo.collection('users').remove({
-                username: req.session.username
-            })
-            req.session.destroy()
-            res.redirect('index.html')
-        }
-    })
-})
-
-app.get('/logout.html', function (req, res) {
-    req.session.destroy()
-    res.redirect('index.html')
-})
-
+//add a places on the db
 app.post("/addplace", function (req, res, next) {
     if (req.body.latitude === "") {
         req.session.errorMessage = "You need to pick a location to add a place"
@@ -321,6 +229,149 @@ app.post("/addplace", function (req, res, next) {
     }
 });
 
+// send Places with the places on the map
+app.get('/places.html', function (req, res) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        else {
+            const dbo = db.db('hiddenplaces-db');
+            dbo.collection("geojson").find({}).toArray((err, doc) => {
+                dbo.collection("places").find({}).toArray((err, placelist) => {
+                    var mapgeojson = JSON.stringify(doc);
+                    var placelistJSON = JSON.stringify(placelist);
+                    if (req.session.username !== undefined) {
+                        res.render('places.html', {
+                            username: req.session.username,
+                            mapgeojson: mapgeojson,
+                            placelist: placelist,
+                            placelistJSON: placelist
+                        })
+                    }
+                    res.render('places.html', {
+                        username: "Anonyme",
+                        mapgeojson: mapgeojson,
+                        placelist: placelist
+                    })
+                })
+            })
+        }
+    })
+});
+
+//can add a comment on every place
+app.post("/addComment", function (req, res, next) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        else {
+            const dbo = db.db('hiddenplaces-db');
+            if (req.session.username === undefined) {
+                var username = "Anonyme";
+            } else {
+                var username = req.session.username;
+            }
+            dbo.collection("places").find({name: req.body.commentId}).toArray((err, place) => {
+                dbo.collection("places").updateOne(place[0], {
+                    $push: {
+                        commentaries: {
+                            comment: req.body.comment,
+                            commentAuthor: username
+                        }
+                    }
+                }, function (err, res) {
+                    if (err) throw err;
+                });
+            })
+            res.redirect("places.html");
+        }
+    })
+});
+
+// send Myprofile if connected if not send index with a errormessage
+app.get('/myProfile.html', function (req, res) {
+    if (req.session.username !== undefined) {
+        res.render('myProfile.html', {
+            username: req.session.username,
+            fullname: req.session.fullname,
+            email: req.session.email,
+        })
+    } else {
+        req.session.errorMessage = "You are not connected, you cant access to your profile. Please login or create a account."
+        res.redirect('index.html')
+    }
+
+})
+
+// change the data of the account
+app.post('/changeData', function (req, res) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+
+        if (req.body.newPassword !== req.body.confirmNewPassword) {
+            res.redirect('myProfile.html')
+
+        } else {
+
+            const dbo = db.db('hiddenplaces-db');
+
+            bcrypt.genSalt(10, function (err, salt) {
+                bcrypt.hash(req.body.newPassword, salt, function (err, hash) {
+
+                    dbo.collection('users').updateOne({
+                        _id: ObjectId(req.session._id),
+                        username: req.session.username,
+                        fullname: req.session.fullname,
+                        email: req.session.email,
+                    }, {
+                        $set: {
+                            username: req.body.newUsername,
+                            hashed_password: hash,
+                            fullname: req.body.newFullname,
+                            email: req.body.newEmail,
+                        }
+                    })
+
+                    req.session.username = req.body.newUsername
+                    req.session.fullname = req.body.newFullname
+                    req.session.email = req.body.newEmail
+                    res.redirect('index.html')
+                })
+            })
+        }
+    })
+})
+
+//delete the account
+app.get('/delete', function (req, res) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+
+        if (req.session.email !== req.body.delete_confirm_email) {
+            res.redirect("myProfile.html")
+        }
+
+        else {
+
+            const dbo = db.db('hiddenplaces-db');
+            dbo.collection('users').remove({
+                _id: ObjectId(req.session._id),
+                username: req.session.username,
+                fullname: req.session.fullname,
+                email: req.session.email,
+            })
+
+            req.session.destroy()
+            res.redirect('index.html')
+        }
+    })
+})
+
+//disconnect the user
+app.get('/logout.html', function (req, res) {
+    req.session.destroy()
+    res.redirect('index.html')
+})
+
+// show the search
 app.post("/search", function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         let config = {
@@ -398,33 +449,6 @@ app.post("/search", function (req, res, next) {
                     }
                 })
             })
-        }
-    })
-});
-
-app.post("/addComment", function (req, res, next) {
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        else {
-            const dbo = db.db('hiddenplaces-db');
-            if (req.session.username === undefined) {
-                var username = "Anonyme";
-            } else {
-                var username = req.session.username;
-            }
-            dbo.collection("places").find({name: req.body.commentId}).toArray((err, place) => {
-                dbo.collection("places").updateOne(place[0], {
-                    $push: {
-                        commentaries: {
-                            comment: req.body.comment,
-                            commentAuthor: username
-                        }
-                    }
-                }, function (err, res) {
-                    if (err) throw err;
-                });
-            })
-            res.redirect("places.html");
         }
     })
 });
