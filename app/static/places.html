@@ -15,112 +15,45 @@
 
 </head>
 <body>
-<header>
-    <div class="topnav" id="myTopnav">
-        <a href="index.html" class="active">HiddenPlaces</a>
-        <a href="index.html">Home</a>
-        <a href="login.html">Log-in</a>
-        <a href="places.html">Places</a>
-        <a href="addPlaces.html">Add places</a>
+    <header>
+        <div class="topnav" id="myTopnav">
+            <a href="index.html" class="active">HiddenPlaces</a>
+            <a href="index.html">Home</a>
+            <a href="login.html">Log-in</a>
+            <a href="places.html">Places</a>
+            <a href="addPlaces.html">Add places</a>
 
 
-        <div class="search-box">
-            <form method="post" action="search">
-                <button class="btn-search"><i class="fas fa-search"></i></button>
-                <input type="text" class="input-search" placeholder="Search..." name="input">
-            </form>
-        </div>
+            <div class="search-box">
+                <form method="post" action="search">
+                    <button class="btn-search"><i class="fas fa-search"></i></button>
+                    <input type="text" class="input-search" placeholder="Search..." name="input">
+                </form>
+            </div>
 
 
-        <div class="dropdown">
-            <!--TODO : Put username vertical align-->
-            <p class="username">{{username}}</p>
-            <img src="img/user.png" alt="Profile picture" id="profile_picture" width="40px" height="40px"
-                 class="profile-picture">
+            <div class="dropdown">
+                <p class="username">{{username}}</p>
+                <img src="img/user.png" alt="Profile picture" id="profile_picture" width="40px" height="40px"
+                     class="profile-picture">
 
-            <div class="dropdown-content" id="dropdownProfile">
-                <a href="myProfile.html">Mon profil</a>
-                <a href="logout.html">Se déconnecter</a>
+                <div class="dropdown-content" id="dropdownProfile">
+                    <a href="myProfile.html">My profil</a>
+                    <a href="logout.html">Disconnect</a>
+                </div>
             </div>
         </div>
+    </header>
+
+    <div style="display:{{style}}" id="overlay" class="overlay">
+        <div id="popup-errorMessage" class="popup-errorMessage">
+            <h2>Error Message : <span class="btnClose" id="btnClose">&times;</span></h2>
+            <h3 id="errormessage"></h3>
+
+        </div>
     </div>
-</header>
 
-<div style="display:{{style}}" id="overlay" class="overlay">
-    <div id="popup-errorMessage" class="popup-errorMessage">
-        <h2>Error Message : <span class="btnClose" id="btnClose">&times;</span></h2>
-        <h3 id="errormessage"></h3>
-
-    </div>
-</div>
-
-<script>
-    var btnClose = document.getElementById("btnClose");
-    var overlay = document.getElementById("overlay");
-
-    btnClose.addEventListener("click", closePopup);
-
-    function closePopup() {
-        overlay.style.display = "none";
-    }
-
-    document.addEventListener("keypress", function (event) {
-        overlay.style.display = 'none'
-    });
-</script>
-<div class="container">
-    <div id="map" class="child"></div>
     <script>
-        /*Map*/
-        document.addEventListener("DOMContentLoaded", function () {
-            var mymap = L.map('map').setView([50.70193521337628, 4.4604133131427925], 8);
-            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                maxZoom: 18,
-                id: 'mapbox/streets-v11',
-                tileSize: 512,
-                zoomOffset: -1,
-                accessToken: 'pk.eyJ1IjoibGViZWxnZSIsImEiOiJja3djNjk0cXMwN241MnR0M292NGJqcDU5In0.-NAdVQ9n-CIrhhRDd1vv5w'
-            }).addTo(mymap);
-            var mapgeojson = "{{ mapgeojson }}"
-            mapgeojson = '{"type": "FeatureCollection","features": ' + mapgeojson.replaceAll('&quot;', '"').replaceAll('\n', '\\n').replaceAll('\r', '\\r') + '}';
-            mapgeojson = JSON.parse(mapgeojson);
-
-            function onEachFeature(feature, layer) {
-                if (feature.properties && feature.properties.popupContent) {
-                    layer.bindPopup("<b>" + feature.properties.name + "</b>" + "<br>" + feature.properties.popupContent);
-                }
-                feature.properties.name = feature.properties.name.replaceAll("&#39;", "'");
-                var tr = document.getElementById("tr_element");
-                tr.setAttribute("id", feature.properties.name);
-                tr.onclick = function () {
-                    mymap.flyTo([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], 12);
-                    var newcomment = document.getElementById("new_comment");
-                    var h2comment = document.getElementById("h2comment")
-                    var commentId = document.getElementById("commentId");
-                    var trcomment = document.getElementById(feature.properties.name + "comment");
-                    var className = feature.properties.name;
-                    var trcommentClass = document.getElementsByClassName("tr_comment");
-                    for (let i = 0; i < trcommentClass.length; i++) {
-                        trcommentClass[i].style.display = "none";
-
-                    }
-                    newcomment.style.display = "block";
-                    h2comment.style.display = "block";
-                    className = className.replaceAll("&#39;", "'");
-                    newcomment.setAttribute("class", className);
-                    commentId.setAttribute("class", className +"Class");
-                    commentId.setAttribute("value", className);
-                    trcomment.style.display = 'table-caption';
-
-                };
-            }
-
-            L.geoJSON(mapgeojson, {
-                onEachFeature: onEachFeature,
-            }).addTo(mymap);
-        });
-        /*PopUp*/
         var btnClose = document.getElementById("btnClose");
         var overlay = document.getElementById("overlay");
 
@@ -134,57 +67,123 @@
             overlay.style.display = 'none'
         });
     </script>
-    <div id="list" class="child">
-        <table>
-            <tr>
-                <thead>
-                <th><h3>List of Places</h3></th>
-                </thead>
-            </tr>
-            <tbody>
-            {{#placelist}}
-            <tr id="tr_element">
-                <td id="td_element"><u><b>{{name}}</b></u><p id="placeAuthor">By {{author}}</p><br>{{description}}</td>
-            </tr>
-            {{/placelist}}
-            </tbody>
-        </table>
+    <div class="container">
+        <div id="map" class="child"></div>
+        <script>
+            /*Map*/
+            document.addEventListener("DOMContentLoaded", function () {
+                var mymap = L.map('map').setView([50.70193521337628, 4.4604133131427925], 8);
+                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: 'pk.eyJ1IjoibGViZWxnZSIsImEiOiJja3djNjk0cXMwN241MnR0M292NGJqcDU5In0.-NAdVQ9n-CIrhhRDd1vv5w'
+                }).addTo(mymap);
+                var mapgeojson = "{{ mapgeojson }}"
+                mapgeojson = '{"type": "FeatureCollection","features": ' + mapgeojson.replaceAll('&quot;', '"').replaceAll('\n', '\\n').replaceAll('\r', '\\r') + '}';
+                mapgeojson = JSON.parse(mapgeojson);
+
+                function onEachFeature(feature, layer) {
+                    if (feature.properties && feature.properties.popupContent) {
+                        layer.bindPopup("<b>" + feature.properties.name + "</b>" + "<br>" + feature.properties.popupContent);
+                    }
+                    feature.properties.name = feature.properties.name.replaceAll("&#39;", "'");
+                    var tr = document.getElementById("tr_element");
+                    tr.setAttribute("id", feature.properties.name);
+                    tr.onclick = function () {
+                        mymap.flyTo([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], 12);
+                        var newcomment = document.getElementById("new_comment");
+                        var h2comment = document.getElementById("h2comment")
+                        var commentId = document.getElementById("commentId");
+                        var trcomment = document.getElementById(feature.properties.name + "comment");
+                        var className = feature.properties.name;
+                        var trcommentClass = document.getElementsByClassName("tr_comment");
+                        for (let i = 0; i < trcommentClass.length; i++) {
+                            trcommentClass[i].style.display = "none";
+
+                        }
+                        newcomment.style.display = "block";
+                        h2comment.style.display = "block";
+                        className = className.replaceAll("&#39;", "'");
+                        newcomment.setAttribute("class", className);
+                        commentId.setAttribute("class", className +"Class");
+                        commentId.setAttribute("value", className);
+                        trcomment.style.display = 'table-caption';
+
+                    };
+                }
+
+                L.geoJSON(mapgeojson, {
+                    onEachFeature: onEachFeature,
+                }).addTo(mymap);
+            });
+            /*PopUp*/
+            var btnClose = document.getElementById("btnClose");
+            var overlay = document.getElementById("overlay");
+
+            btnClose.addEventListener("click", closePopup);
+
+            function closePopup() {
+                overlay.style.display = "none";
+            }
+
+            document.addEventListener("keypress", function (event) {
+                overlay.style.display = 'none'
+            });
+        </script>
+        <div id="list" class="child">
+            <table>
+                <tr>
+                    <thead>
+                    <th><h3>List of Places</h3></th>
+                    </thead>
+                </tr>
+                <tbody>
+                {{#placelist}}
+                <tr id="tr_element">
+                    <td id="td_element"><u><b>{{name}}</b></u><p id="placeAuthor">By {{author}}</p><br>{{description}}</td>
+                </tr>
+                {{/placelist}}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
-<form method="post" action="addComment">
-<table>
-    <thead>
-    <th><h2 id="h2comment">Comments</h2></th>
-    </thead>
-    <tbody>
-    <tr id="new_comment" class="new_comment">
-        <td>
-            <input type="text" placeholder="Write a comment..." name="comment" id=" " class="comment">
-            <input id="commentId" type="hidden" name="commentId" value="" class="commentId"/>
-        </td>
-    </tr>
-    </tbody>
-</table>
-</form>
-<table>
-    <tbody>
-        {{#placelist}}
-            <tr class="tr_comment" id="{{name}}comment">
-                <td>
-                {{#commentaries}}
-                    {{#.}}
-                <div class="textcomment"><p id="divComment">{{comment}}</p><p id="usernameComment">By {{commentAuthor}}</p></div>
-                    {{/.}}
-                {{/commentaries}}
-                </td>
-            </tr>
-    {{/placelist}}
-    </tbody>
-</table>
+    <form method="post" action="addComment">
+    <table>
+        <thead>
+        <th><h2 id="h2comment">Comments</h2></th>
+        </thead>
+        <tbody>
+        <tr id="new_comment" class="new_comment">
+            <td>
+                <input type="text" placeholder="Write a comment..." name="comment" id=" " class="comment">
+                <input id="commentId" type="hidden" name="commentId" value="" class="commentId"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </form>
+    <table>
+        <tbody>
+            {{#placelist}}
+                <tr class="tr_comment" id="{{name}}comment">
+                    <td>
+                    {{#commentaries}}
+                        {{#.}}
+                    <div class="textcomment"><p id="divComment">{{comment}}</p><p id="usernameComment">By {{commentAuthor}}</p></div>
+                        {{/.}}
+                    {{/commentaries}}
+                    </td>
+                </tr>
+        {{/placelist}}
+        </tbody>
+    </table>
 </body>
 
 <footer>
     <p>&copy; 2021-2022 HiddenPlaces</p>
-    <p>Tous droits réservés</p>
+    <p>All rights reserved</p>
 </footer>
 </html>

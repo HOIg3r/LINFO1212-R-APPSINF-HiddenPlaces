@@ -9,50 +9,49 @@
 
 </head>
 <body>
-<header>
-    <div class="topnav" id="myTopnav">
-        <a href="index.html" class="active">HiddenPlaces</a>
-        <a href="index.html">Home</a>
-        <a href="login.html">Log-in</a>
-        <a href="places.html">Places</a>
-        <a href="addPlaces.html">Add places</a>
+    <header>
+        <div class="topnav" id="myTopnav">
+            <a href="index.html" class="active">HiddenPlaces</a>
+            <a href="index.html">Home</a>
+            <a href="login.html">Log-in</a>
+            <a href="places.html">Places</a>
+            <a href="addPlaces.html">Add places</a>
 
-        <div class="search-box">
-            <form method="post" action="search">
-                <button class="btn-search"><i class="fas fa-search"></i></button>
-                <input type="text" class="input-search" placeholder="Search..." name="input">
-            </form>
-        </div>
+            <div class="search-box">
+                <form method="post" action="search">
+                    <button class="btn-search"><i class="fas fa-search"></i></button>
+                    <input type="text" class="input-search" placeholder="Search..." name="input">
+                </form>
+            </div>
 
 
-        <div class="dropdown">
-            <p class="username">{{username}}</p>
-            <img src="img/user.png" alt="Profile picture" id="profile_picture" width="40px" height="40px"
-                 class="profile-picture">
+            <div class="dropdown">
+                <p class="username">{{username}}</p>
+                <img src="img/user.png" alt="Profile picture" id="profile_picture" width="40px" height="40px"
+                     class="profile-picture">
 
-            <div class="dropdown-content" id="dropdownProfile">
-                <a href="myProfile.html">Mon profil</a>
-                <a href="logout.html">Se déconnecter</a>
+                <div class="dropdown-content" id="dropdownProfile">
+                    <a href="myProfile.html">My profil</a>
+                    <a href="logout.html">Disconnect</a>
+                </div>
             </div>
         </div>
-    </div>
-</header>
+    </header>
 
+    <div class="welcome_message">
+        <img src="img/logo.png">
+        <h2><span>HiddenPlaces</span> </h2>
+        <h1><span>The beautifulest places all around you</span></h1>
+    </div>
+
+    <div style="display:{{style}}" id="overlay" class="overlay">
+        <div id="popup-errorMessage" class="popup-errorMessage">
+            <h2>Error Message : <span class="btnClose" id="btnClose">&times;</span></h2>
+            <h3>{{errorMessage}}</h3>
+
+        </div>
+    </div>
 </body>
-
-<div class="welcome_message">
-    <img src="img/logo.png">
-    <h2><span>HiddenPlaces</span> </h2>
-    <h1><span>The beautifulest places all around you</span></h1>
-</div>
-
-<div style="display:{{style}}" id="overlay" class="overlay">
-    <div id="popup-errorMessage" class="popup-errorMessage">
-        <h2>Error Message : <span class="btnClose" id="btnClose">&times;</span></h2>
-        <h3>{{errorMessage}}</h3>
-
-    </div>
-</div>
 
 <script>
     var btnClose = document.getElementById("btnClose");
@@ -68,8 +67,9 @@
         overlay.style.display = 'none'
     });
 </script>
+
 <footer>
     <p>&copy; 2021-2022 HiddenPlaces</p>
-    <p>Tous droits réservés</p>
+    <p>All rights reserved</p>
 </footer>
 </html>

@@ -10,102 +10,102 @@
 
 </head>
 <body>
-<header>
-    <div class="topnav" id="myTopnav">
-        <a href="index.html" class="active">HiddenPlaces</a>
-        <a href="index.html">Home</a>
-        <a href="login.html">Log-in</a>
-        <a href="places.html">Places</a>
-        <a href="addPlaces.html">Add places</a>
+    <header>
+        <div class="topnav" id="myTopnav">
+            <a href="index.html" class="active">HiddenPlaces</a>
+            <a href="index.html">Home</a>
+            <a href="login.html">Log-in</a>
+            <a href="places.html">Places</a>
+            <a href="addPlaces.html">Add places</a>
 
 
-        <div class="search-box">
-            <form method="post" action="search">
-                <button class="btn-search"><i class="fas fa-search"></i></button>
-                <input type="text" class="input-search" placeholder="Search..." name="input">
+            <div class="search-box">
+                <form method="post" action="search">
+                    <button class="btn-search"><i class="fas fa-search"></i></button>
+                    <input type="text" class="input-search" placeholder="Search..." name="input">
+                </form>
+            </div>
+
+
+            <div class="dropdown">
+                <p class="username">{{username}}</p>
+                <img src="img/user.png" alt="Profile picture" id="profile_picture" width="40px" height="40px"
+                     class="profile-picture">
+
+                <div class="dropdown-content" id="dropdownProfile">
+                    <a href="myProfile.html">My profil</a>
+                    <a href="logout.html">Disconnect</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>My profil</h1>
+        <div id="content">
+            <p><span> Your username</span> : {{username}} </p>
+            <p><span>Your fullname</span> : {{fullname}}</p>
+            <p><span>Your Email</span> : {{email}}</p>
+            <button id="btnChangeMyData">Change my data</button>
+            <button id="btnDeleteAccount">Delete my account</button>
+        </div>
+    </div>
+
+    <div class="overlay_changeDataPopup" id="overlay_changeDataPopup">
+        <div class="content_changeDataPopup">
+            <h2>Modifier ses données<span class="btnCloseChangeDataPopup" id="btnCloseChangeDataPopup">&times;</span></h2>
+            <form id="formulaire" action="changeData" method="post">
+                <input name="newUsername" placeholder="new username" type="text" required>
+                <br>
+                <input name="newFullname" placeholder="new fullname" type="text" required>
+                <br>
+                <input name="newEmail" placeholder="example@hotmail.com" type="email" required>
+                <br>
+                <input name="newPassword" placeholder="new password" type="password" required>
+                <br>
+                <input name="confirmNewPassword" placeholder="confirm password" type="password" required>
+                <br>
+                <button class="btnChangeDataPopup" type="submit">Confirm</button>
             </form>
         </div>
 
+    </div>
 
-        <div class="dropdown">
-            <!--TODO : Put username vertical align-->
-            <p class="username">{{username}}</p>
-            <img src="img/user.png" alt="Profile picture" id="profile_picture" width="40px" height="40px"
-                 class="profile-picture">
-
-            <div class="dropdown-content" id="dropdownProfile">
-                <a href="myProfile.html">Mon profil</a>
-                <a href="logout.html">Se déconnecter</a>
-            </div>
+    <div class="overlay_deleteAccountPopup" id="overlay_deleteAccountPopup">
+        <div class="content_deleteAccountPopup" id="content_deleteAccountPopup">
+            <h2>Supprimer mon compte<span class="btnCloseDeleteAccountPopup" id="btnCloseDeleteAccountPopup">&times;</span></h2>
+            <h4>You are about to delete your account, the places you have added to the site will be kept and still readable.<br>
+                All your counter data will be permanently deleted.<br>
+                To confirm that you want to delete your account, please insert your e-mail.</h4>
+            <form class="delete_btn" action="delete" method="get">
+                <input name="delete_confirm_email" class="delete_confirm_email" id="delete_confirm_email" placeholder="YourEmail@hotmail.com">
+                <button class="delete_account_btn" id="delete_account_btn" type="submit">Delete my account</button>
+            </form>
         </div>
     </div>
-</header>
 
-<div class="container">
-    <h1>My profil</h1>
-    <div id="content">
-        <p><span> Your username</span> : {{username}} </p>
-        <p><span>Your fullname</span> : {{fullname}}</p>
-        <p><span>Your Email</span> : {{email}}</p>
-        <button id="btnChangeMyData">Change my data</button>
-        <button id="btnDeleteAccount">Delete my account</button>
+    <div style="display:{{style}}" id="overlay" class="overlay">
+        <div id="popup-errorMessage" class="popup-errorMessage">
+            <h2>Error Message : <span class="btnClose" id="btnClose">&times;</span></h2>
+            <h3>{{errorMessage}}</h3>
+
+        </div>
     </div>
-</div>
-
-<div class="overlay_changeDataPopup" id="overlay_changeDataPopup">
-    <div class="content_changeDataPopup">
-        <h2>Modifier ses données<span class="btnCloseChangeDataPopup" id="btnCloseChangeDataPopup">&times;</span></h2>
-        <form id="formulaire" action="changeData" method="post">
-            <input name="newUsername" placeholder="new username" type="text" required>
-            <br>
-            <input name="newFullname" placeholder="new fullname" type="text" required>
-            <br>
-            <input name="newEmail" placeholder="example@hotmail.com" type="email" required>
-            <br>
-            <input name="newPassword" placeholder="new password" type="password" required>
-            <br>
-            <input name="confirmNewPassword" placeholder="confirm password" type="password" required>
-            <br>
-            <button class="btnChangeDataPopup" type="submit">Confirm</button>
-        </form>
-    </div>
-
-</div>
-
-<div class="overlay_deleteAccountPopup" id="overlay_deleteAccountPopup">
-    <div class="content_deleteAccountPopup" id="content_deleteAccountPopup">
-        <h2>Supprimer mon compte<span class="btnCloseDeleteAccountPopup" id="btnCloseDeleteAccountPopup">&times;</span></h2>
-        <h4>You are about to delete your account, the places you have added to the site will be kept and still readable.<br>
-            All your counter data will be permanently deleted.<br>
-            To confirm that you want to delete your account, please insert your e-mail.</h4>
-        <form class="delete_btn" action="delete" method="get">
-            <input name="delete_confirm_email" class="delete_confirm_email" id="delete_confirm_email" placeholder="YourEmail@hotmail.com">
-            <button class="delete_account_btn" id="delete_account_btn" type="submit">Delete my account</button>
-        </form>
-    </div>
-</div>
-
-<div style="display:{{style}}" id="overlay" class="overlay">
-    <div id="popup-errorMessage" class="popup-errorMessage">
-        <h2>Error Message : <span class="btnClose" id="btnClose">&times;</span></h2>
-        <h3>{{errorMessage}}</h3>
-
-    </div>
-</div>
+</body>
 
 <script>
     //Change Data
     var btnChangeMyData = document.getElementById('btnChangeMyData')
     var btnCloseChangeDataPopup = document.getElementById('btnCloseChangeDataPopup')
     var overlayChangeDataPopup = document.getElementById('overlay_changeDataPopup')
-    
+
     btnChangeMyData.addEventListener('click', openChangeDataPopup)
     btnCloseChangeDataPopup.addEventListener('click', closeChangeDataPopup)
-    
+
     function openChangeDataPopup() {
         overlayChangeDataPopup.style.display = 'block'
     }
-    
+
     function closeChangeDataPopup() {
         overlayChangeDataPopup.style.display = 'none'
     }
@@ -127,10 +127,8 @@
     }
 </script>
 
-</body>
-
 <footer>
     <p>&copy; 2021-2022 HiddenPlaces</p>
-    <p>Tous droits réservés</p>
+    <p>All rights reserved</p>
 </footer>
 </html>

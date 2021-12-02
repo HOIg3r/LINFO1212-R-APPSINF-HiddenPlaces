@@ -177,7 +177,7 @@ app.get('/addPlaces.html', function (req, res) {
             username: req.session.username
         })
     } else {
-        req.session.errorMessage = 'You should be connected to add a place\n Please login or sign-up'
+        req.session.errorMessage = 'You must be connected to add a place\n Please login or sign-up'
         res.redirect('index.html')
     }
 

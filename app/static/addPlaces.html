@@ -15,98 +15,98 @@
 
 </head>
 <body>
-<header>
-    <div class="topnav" id="myTopnav">
-        <a href="index.html" class="active">HiddenPlaces</a>
-        <a href="index.html">Home</a>
-        <a href="login.html">Log-in</a>
-        <a href="places.html">Places</a>
-        <a href="addPlaces.html">Add places</a>
+    <header>
+        <div class="topnav" id="myTopnav">
+            <a href="index.html" class="active">HiddenPlaces</a>
+            <a href="index.html">Home</a>
+            <a href="login.html">Log-in</a>
+            <a href="places.html">Places</a>
+            <a href="addPlaces.html">Add places</a>
 
 
-        <div class="search-box">
-            <form method="post" action="search">
-                <button class="btn-search"><i class="fas fa-search"></i></button>
-                <input type="text" class="input-search" placeholder="Search..." name="input">
-            </form>
-        </div>
+            <div class="search-box">
+                <form method="post" action="search">
+                    <button class="btn-search"><i class="fas fa-search"></i></button>
+                    <input type="text" class="input-search" placeholder="Search..." name="input">
+                </form>
+            </div>
 
 
-        <div class="dropdown">
-            <!--TODO : Put username vertical align-->
-            <p class="username">{{username}}</p>
-            <img src="img/user.png" alt="Profile picture" id="profile_picture" width="40px" height="40px"
-                 class="profile-picture">
+            <div class="dropdown">
+                <p class="username">{{username}}</p>
+                <img src="img/user.png" alt="Profile picture" id="profile_picture" width="40px" height="40px"
+                     class="profile-picture">
 
-            <div class="dropdown-content" id="dropdownProfile">
-                <a href="myProfile.html">Mon profil</a>
-                <a href="logout.html">Se déconnecter</a>
+                <div class="dropdown-content" id="dropdownProfile">
+                    <a href="myProfile.html">My profil</a>
+                    <a href="logout.html">Disconnect</a>
+                </div>
             </div>
         </div>
+    </header>
+    <h1>Add a Place</h1>
+    <div id="map"></div>
+
+    <div style="display:{{style}}" id="overlay" class="overlay">
+        <div id="popup-errorMessage" class="popup-errorMessage">
+            <h2>Error Message : <span class="btnClose" id="btnClose">&times;</span></h2>
+            <h3 id="errormessage">{{errorMessage}}</h3>
+
+        </div>
     </div>
-</header>
-<h1>Add a Place</h1>
-<div id="map"></div>
 
-<div style="display:{{style}}" id="overlay" class="overlay">
-    <div id="popup-errorMessage" class="popup-errorMessage">
-        <h2>Error Message : <span class="btnClose" id="btnClose">&times;</span></h2>
-        <h3 id="errormessage">{{errorMessage}}</h3>
+    <script>
+        /*Map*/
+        var mymap = L.map('map').setView([50.70193521337628,4.4604133131427925], 6);
 
-    </div>
-</div>
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoibGViZWxnZSIsImEiOiJja3djNjk0cXMwN241MnR0M292NGJqcDU5In0.-NAdVQ9n-CIrhhRDd1vv5w'
+        }).addTo(mymap);
+        var mp = {};
+        mymap.on("click", function(e){
+            if (mp != undefined) {
+                mymap.removeLayer(mp);
+            };
+            mp = new L.Marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
+            var lati = document.getElementById("lati");
+            var long = document.getElementById("long");
+            lati.value = e.latlng.lat;
+            long.value = e.latlng.lng;
+        });
 
-<script>
-	/*Map*/
-    var mymap = L.map('map').setView([50.70193521337628,4.4604133131427925], 6);
+        /*Popup*/
 
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 18,
-        id: 'mapbox/streets-v11',
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: 'pk.eyJ1IjoibGViZWxnZSIsImEiOiJja3djNjk0cXMwN241MnR0M292NGJqcDU5In0.-NAdVQ9n-CIrhhRDd1vv5w'
-    }).addTo(mymap);
-    var mp = {};
-    mymap.on("click", function(e){
-        if (mp != undefined) {
-            mymap.removeLayer(mp);
-        };
-        mp = new L.Marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
-        var lati = document.getElementById("lati");
-        var long = document.getElementById("long");
-        lati.value = e.latlng.lat;
-        long.value = e.latlng.lng;
-    });
+        var btnClose = document.getElementById("btnClose");
+        var overlay = document.getElementById("overlay");
 
-    /*Popup*/
+        btnClose.addEventListener("click", closePopup);
 
-    var btnClose = document.getElementById("btnClose");
-    var overlay = document.getElementById("overlay");
+        function closePopup() {
+        overlay.style.display = "none";
+        }
 
-    btnClose.addEventListener("click", closePopup);
+        document.addEventListener("keypress", function(event) {
+            overlay.style.display = 'none'
+        });
 
-    function closePopup() {
-    overlay.style.display = "none";
-    }
-
-    document.addEventListener("keypress", function(event) {
-        overlay.style.display = 'none'
-    });
-
-</script>
-    <form class="add_places" id="form" method="post" action="addplace" name="form">
-        <!-- <input type="file" accept="image/*" required> !-->
-        <input type="text" name="name" id="name" placeholder="Add a name" required>
-        <textarea type="textarea" name="description" id="description" placeholder="Add a description" required></textarea>
-        <input id="lati" type="hidden" name="latitude" value="" size ="40" required/>
-        <input id="long" type="hidden" name="longitude" value="" size ="40" required/>
-        <button type="submit">Submit</button>
-    </form>
+    </script>
+        <form class="add_places" id="form" method="post" action="addplace" name="form">
+            <!-- <input type="file" accept="image/*" required> !-->
+            <input type="text" name="name" id="name" placeholder="Add a name" required>
+            <textarea type="textarea" name="description" id="description" placeholder="Add a description" required></textarea>
+            <input id="lati" type="hidden" name="latitude" value="" size ="40" required/>
+            <input id="long" type="hidden" name="longitude" value="" size ="40" required/>
+            <button type="submit">Submit</button>
+        </form>
 </body>
+
 <footer>
     <p>&copy; 2021-2022 HiddenPlaces</p>
-    <p>Tous droits réservés</p>
+    <p>All rights reserved</p>
 </footer>
 </html>
