@@ -5,14 +5,14 @@
 - [ ] Ajouter des commentaire un peu partouts 
 - [ ] rendre le code lisible
 - [X] commentaires
-- [ ] rating système
+- [ ] ~~rating système~~ abandoned
 - [ ] finir README
 - [ ] Rapport
 - [X] Supprimer compte
-- [ ] creer BD de base
+- [X] creer BD de base
 - [X] Fix dropdown
 - [ ] Welcome message
-- [ ] Logo
+- [X] Logo
 
 ### Table des matières
 
@@ -109,7 +109,7 @@ Vous devriez voir apparaitre le lien du site internet
 ```text
 ---- Site: https://localhost:8080/index.html ----
 ```
-
+Et voila le site web est en marche vous pouvez vous rendre dessus 
 
 ### lancer les test dans le CMD
 

@@ -1,8 +1,1 @@
-{
-  "user": {
-    "username": "",
-    "password": "",
-    "mail": "",
-    "fullname": ""
-  }
-}
+{"username":"Admin","hashed_password":"$2a$10$PZerWvjgbfxiIMLj6DtoMe9DSKwi6qe4UziyCbWpb9DTxelVJ1ceK","fullname":"Admin","email":"Admin@HiddenPlaces.colm"}
