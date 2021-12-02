@@ -341,7 +341,7 @@ app.post('/changeData', function (req, res) {
 })
 
 //delete the account
-app.get('/delete', function (req, res) {
+app.post('/delete', function (req, res) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
 
