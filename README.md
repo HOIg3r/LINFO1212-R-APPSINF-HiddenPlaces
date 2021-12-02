@@ -8,7 +8,7 @@
 - [ ] rating système
 - [ ] finir README
 - [ ] Rapport
-- [ ] Supprimer compte
+- [X] Supprimer compte
 - [ ] creer BD de base
 - [X] Fix dropdown
 - [ ] Welcome message
@@ -29,7 +29,10 @@ base de données [MongoDB](https://www.mongodb.com/) le tout héberger sur un se
 
 ### Thème du site web
 
-Notre site web a pour but de regrouper tous les endroits dans le monde a visiter au moin une fois dans ça vie
+Notre site web a pour but de réunir les endroits à visiter au moins une fois dans sa vie. Ce site pourra aider de 
+futur voyageur à trouver les meilleurs lieux à visiter dans une ville ou pays qu'ils veulent apercevoir. Ils pourront 
+aussi par la même occasion visiter des lieux à découvrir autour de chez vous qui sont selon d'autres utilisateurs de 
+notre site web des lieux à absolument découvrir une fois dans sa vie.
 
 ### Prérequis
 
