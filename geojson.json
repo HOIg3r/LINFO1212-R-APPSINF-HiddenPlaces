@@ -1,12 +1,15 @@
-{
-  "type": "Feature",
-  "properties": {
-    "name": "",
-    "popupContent": "",
-    "author" : ""
-  },
-  "geometry": {
-    "type": "Point",
-    "coordinates": []
-  }
-}
+{"type":"Feature","properties":{"name":"London Bridge","popupContent":"A beautiful bridge","author":"Holger"},"geometry":{"type":"Point","coordinates":[-0.087668896157993,51.5079784262477]}}
+{"type":"Feature","properties":{"name":"Atomium","popupContent":"Incredible monument in BX <3","author":"Holger"},"geometry":{"type":"Point","coordinates":[4.341659545898438,50.89481144376054]}}
+{"type":"Feature","properties":{"name":"Cathédrale Notre Dame","popupContent":"Un bijou de Paris qui a malheureusement péri sous les flammes","author":"Holger"},"geometry":{"type":"Point","coordinates":[2.3504734039306645,48.852712627696]}}
+{"type":"Feature","properties":{"name":"Cercle Industriel","popupContent":"Un bar de grande qualité avec des personnes très gentils avec de joli chapeau qui sente un peu fort la bière","author":"Holger"},"geometry":{"type":"Point","coordinates":[4.617564082036552,50.66809450707802]}}
+{"type":"Feature","properties":{"name":"Bar Remy","popupContent":"Bar avec beaucoup d'ancien dans une ambiance fin année 50 très marrante\r\nattention aux travaux sur le pont","author":"Holger"},"geometry":{"type":"Point","coordinates":[5.445508360753593,50.267998281089945]}}
+{"type":"Feature","properties":{"name":"Scout de Marche","popupContent":"Très gentil scout qui aide les habitants\r\nun léger problème avec la bière soi-disant","author":"Holger"},"geometry":{"type":"Point","coordinates":[5.341622829546395,50.2271686146351]}}
+{"type":"Feature","properties":{"name":"Satue of liberty","popupContent":"it's green and i like it","author":"Holger"},"geometry":{"type":"Point","coordinates":[-74.04451131842507,40.689173435362086]}}
+{"type":"Feature","properties":{"name":"Breedene plage","popupContent":"Very calm and beautiful","author":"Holger"},"geometry":{"type":"Point","coordinates":[2.958011626760708,51.24945423398071]}}
+{"type":"Feature","properties":{"name":"기념비 재단 파티","popupContent":"우리의 지도자 김정은에게 영광을","author":"Holger"},"geometry":{"type":"Point","coordinates":[125.776455402156,39.02775044216063]}}
+{"type":"Feature","properties":{"name":"L'Oie du lac","popupContent":"Attention elles mordent et attaquent","author":"Holger"},"geometry":{"type":"Point","coordinates":[4.608135223170394,50.66745345514593]}}
+{"type":"Feature","properties":{"name":"Nothing append in tiananmen square in 1989","popupContent":"1989年天安门广场什么都没发生","author":"Holger"},"geometry":{"type":"Point","coordinates":[116.3916063308716,39.90318925934133]}}
+{"type":"Feature","properties":{"name":"Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoc","popupContent":"The city with the longest name","author":"Holger"},"geometry":{"type":"Point","coordinates":[-4.200017447001302,53.22511409157579]}}
+{"type":"Feature","properties":{"name":"Never Gonna Give You Up","popupContent":"Never gonna let you down","author":"Holger"},"geometry":{"type":"Point","coordinates":[-0.22004628135618987,51.51309987021311]}}
+{"type":"Feature","properties":{"name":"Augusto's Porto","popupContent":"Best porto in the city","author":"Holger"},"geometry":{"type":"Point","coordinates":[-8.613955020282448,41.13679417387864]}}
+{"type":"Feature","properties":{"name":"Sculpture of a Rabbit in a house","popupContent":"Beautiful sculpture of a rabit whit scrapt metal","author":"Holger"},"geometry":{"type":"Point","coordinates":[-8.615036487481122,41.136910530376454]}}

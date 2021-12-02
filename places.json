@@ -1,11 +1,21 @@
-{
-  "name": "",
-  "coordinate": "",
-  "rating": 0,
-  "commentaries": [{
-    "commentAuthor": "",
-    "comment": ""
-  }],
-  "description": "",
-  "author": ""
-}
+{"name":"London Bridge","coordinate":[-0.087668896157993,51.5079784262477],"rating":null,"description":"A beautiful bridge","author":"Holger","commentaries":[]}
+{"name":"Atomium","coordinate":[4.341659545898438,50.89481144376054],"rating":null,"description":"Incredible monument in BX <3","author":"Holger","commentaries":[]}
+{"name":"Cathédrale Notre Dame","coordinate":[2.3504734039306645,48.852712627696],"rating":null,"description":"Un bijou de Paris qui a malheureusement péri sous les flammes","author":"Holger","commentaries":[{"comment":"RIP in peace notre dame","commentAuthor":"Holger"}]}
+{"name":"Cercle Industriel","coordinate":[4.617564082036552,50.66809450707802],"rating":null,"description":"Un bar de grande qualité avec des personnes très gentils avec de joli chapeau qui sente un peu fort la bière","author":"Holger","commentaries":[{"comment":"Les chapeau s'appelle des Calottes","commentAuthor":"Holger"},{"comment":"Mon bar préféré","commentAuthor":"Holger"},{"comment":"ca me rappelle ma jeunesse","commentAuthor":"Holger"}]}
+{"name":"Bar Remy","coordinate":[5.445508360753593,50.267998281089945],"rating":null,"description":"Bar avec beaucoup d'ancien dans une ambiance fin année 50 très marrante\r\nattention aux travaux sur le pont","author":"Holger","commentaries":[]}
+{"name":"Scout de Marche","coordinate":[5.341622829546395,50.2271686146351],"rating":null,"description":"Très gentil scout qui aide les habitants\r\nun léger problème avec la bière soi-disant","author":"Holger","commentaries":[{"comment":"j'adore","commentAuthor":"Holger"}]}
+{"name":"Satue of liberty","coordinate":[-74.04451131842507,40.689173435362086],"rating":null,"description":"it's green and i like it","author":"Holger","commentaries":[{"comment":"I'm colorblind a thaught she was blue","commentAuthor":"Holger"}]}
+{"name":"Breedene plage","coordinate":[2.958011626760708,51.24945423398071],"rating":null,"description":"Very calm and beautiful","author":"Holger","commentaries":[{"comment":"perfect beech","commentAuthor":"Holger"}]}
+{"name":"기념비 재단 파티","coordinate":[125.776455402156,39.02775044216063],"rating":null,"description":"우리의 지도자 김정은에게 영광을","author":"Holger","commentaries":[{"comment":"Good","commentAuthor":"Holger"}]}
+{"name":"L'Oie du lac","coordinate":[4.608135223170394,50.66745345514593],"rating":null,"description":"Attention elles mordent et attaquent","author":"Holger","commentaries":[{"comment":"Bientot je m'en ferais une a la broche si elles continue de venir et faire leur besoin dans mon kot","commentAuthor":"Holger"}]}
+{"name":"Nothing append in tiananmen square in 1989","coordinate":[116.3916063308716,39.90318925934133],"rating":null,"description":"1989年天安门广场什么都没发生","author":"Holger","commentaries":[{"comment":"+500 credit social score 😄 😄 😄 😄 😄 😄 😄 😄 👍 👍 👍 👍 👍 👍","commentAuthor":"Holger"}]}
+{"name":"Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoc","coordinate":[-4.200017447001302,53.22511409157579],"rating":null,"description":"The city with the longest name","author":"Holger","commentaries":[{"comment":"i think your cat walked on the keybord","commentAuthor":"Holger"}]}
+{"name":"Never Gonna Give You Up","coordinate":[-0.22004628135618987,51.51309987021311],"rating":null,"description":"Never gonna let you down","author":"Holger","commentaries":[{"comment":"Never gonna run around and desert you","commentAuthor":"Holger"},{"comment":"Never gonna make you cry","commentAuthor":"Holger"},{"comment":"Never gonna say goodbye","commentAuthor":"Holger"},{"comment":"Never gonna tell a lie and hurt you","commentAuthor":"Holger"}]}
+
+
+
+
+
+
+
+
