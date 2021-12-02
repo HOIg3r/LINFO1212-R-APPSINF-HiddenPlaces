@@ -74,6 +74,8 @@ app.get('/index.html', function (req, res) {
                 style: 'block',
                 errorMessage: req.session.errorMessage
             })
+            //delete the errorMessage
+            req.session.errorMessage = ''
         } else {
             res.render('index.html', {
                 username: 'Anonyme',
@@ -83,6 +85,7 @@ app.get('/index.html', function (req, res) {
             //delete the errorMessage
             req.session.errorMessage = ''
         }
+
     }
 
 })
