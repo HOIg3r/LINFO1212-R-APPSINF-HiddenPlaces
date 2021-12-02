@@ -1,31 +1,155 @@
-
-
-.container {
-    margin-left: 20px;
+.container{
+    width:400px;
+    height:400px;
+    background-color:white;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    border-radius:5%;
+    border:3px solid;
+    text-align:center;
 }
-#info {
-    color: lightgray;
+
+.container button{
+    width: 150px;
+    height: 50px;
+    border-radius: 10px;
+    outline: none;
+    position: relative;
+    display: block;
+    margin: 1% auto 3% auto;
+    font-size: 20px;
+    font-family: Ubuntu sans-serif;
 }
 
-h1 {
-    font-family: Ubuntu;
-    color: white;
-    font-size: 30px;
+.container button:hover{
+    color:white;
+    background-color: #e52a2a;
+    transition: 0.2s;
+}
+
+/*PopUp Change Data*/
+
+.overlay_changeDataPopup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 100;
+}
+
+.content_changeDataPopup {
+    text-align: center;
+    margin: 100px auto;
+    width: 400px;
+    height: 350px;
+    background-color: white;
+    border-radius: 5px;
+    border: 2px solid;
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.34), 0 17px 50px 0 rgba(0, 0, 0, 0.29);
+    padding: 5px 10px;
+    z-index: 50;
+}
+
+.btnCloseChangeDataPopup {
+    float: right;
+    cursor: pointer;
+    color: black;
+}
+
+.overlay_changeDataPopup h2 {
     text-decoration: underline;
-    margin-bottom: 2%;
+    text-align: center;
+    color: red;
 }
 
-span {
+.overlay_changeDataPopup input{
+    height:25px;
+    width: 140px;
+    margin: 7px;
+    border: 2px solid;
+    border-radius: 10px;
+}
+
+.overlay_changeDataPopup button{
+    width: 100px;
+    height: 35px;
+    border-radius: 5px;
+    outline: none;
+    position: relative;
+    display: block;
+    margin: 1% auto 3% auto;
+    font-size: 17px;
+}
+
+.overlay_changeDataPopup button:hover{
     color: white;
+    transition: 0.2s;
+    background-color: #44c004;
+}
+
+/* Popup Delete Account*/
+.overlay_deleteAccountPopup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 100;
+}
+
+.content_deleteAccountPopup {
+    text-align: center;
+    margin: 100px auto;
+    width: 400px;
+    height: 350px;
+    background-color: white;
+    border-radius: 5px;
+    border: 2px solid;
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.34), 0 17px 50px 0 rgba(0, 0, 0, 0.29);
+    padding: 5px 10px;
+    z-index: 50;
+}
+
+.btnCloseDeleteAccountPopup {
+    float: right;
+    cursor: pointer;
+    color: black;
+}
+
+.overlay_deleteAccountPopup h2 {
     text-decoration: underline;
+    text-align: center;
+    color: red;
 }
 
-button {
-    width: 180px;
-    height: 23px;
-    margin-bottom: 10px;
+.overlay_deleteAccountPopup input{
+    height:25px;
+    width: 250px;
+    margin: 7px;
+    border: 2px solid;
+    border-radius: 10px;
 }
 
-#changedon {
-    margin-bottom: 30px;
+.overlay_deleteAccountPopup button{
+    width: 200px;
+    height: 50px;
+    border-radius: 5px;
+    outline: none;
+    position: relative;
+    display: block;
+    margin: 1% auto 3% auto;
+    font-size: 17px;
 }
+
+.overlay_deleteAccountPopup button:hover{
+    color: white;
+    transition: 0.2s;
+    background-color: #e52a2a;
+}
+

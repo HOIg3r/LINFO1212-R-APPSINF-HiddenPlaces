@@ -21,6 +21,7 @@ let fs = require('fs');
 // other module
 let NlpjsTFr = require('nlp-js-tools-french');
 let bcrypt = require('bcryptjs');
+const {ObjectId} = require("mongodb");
 
 
 // Create the Cookie settings
@@ -89,7 +90,7 @@ app.get('/login.html', function (req, res) {
         req.session.errorMessage = "You are already connected, please disconnect before login or sign-up a other account"
         res.redirect('index.html')
     } else {
-            res.render('login.html',{username : "Anonyme"})
+        res.render('login.html', {username: "Anonyme"})
     }
 })
 
@@ -145,8 +146,8 @@ app.post('/signup', (req, res,) => {
                             dbo.collection('users').insertOne({
                                 username: req.body.signup_username,
                                 hashed_password: hash,
-                                email: req.body.signup_email,
                                 fullname: req.body.signup_fullname,
+                                email: req.body.signup_email,
                             })
 
                         })
@@ -210,7 +211,7 @@ app.get('/myProfile.html', function (req, res) {
         res.render('myProfile.html', {
             username: req.session.username,
             fullname: req.session.fullname,
-            email: req.session.email
+            email: req.session.email,
         })
     } else {
         req.session.errorMessage = "You are not connected, you cant access to your profile. Please login or create a account."
@@ -219,32 +220,45 @@ app.get('/myProfile.html', function (req, res) {
 
 })
 
-app.post('/changeData',function(req,res){
-    if (req.body.newPassword !== req.body.confirmNewPassword){
-        res.redirect('myProfile.html')
-    }
-    MongoClient.connect(url, function(err,db){
+app.post('/changeData', function (req, res) {
+    MongoClient.connect(url, function (err, db) {
         if (err) throw err;
-        else{
-            const dbo = db.db('hiddenplaces-db');
-            dbo.collection('users').updateOne({
-                username: req.session.username,
-                fullname: req.session.fullname,
-                email: req.session.email
-            },{$set:{
-                    username: req.body.newUsername,
-                    fullname: req.body.newFullname,
-                    email: req.body.newEmail,
-                    //TODO: Crypter password
-                }})
+        if (req.body.newPassword !== req.body.confirmNewPassword) {
+            res.redirect('myProfile.html')
+        } else {
 
-            res.redirect('index.html')
+            const dbo = db.db('hiddenplaces-db');
+
+            bcrypt.genSalt(10, function (err, salt) {
+                bcrypt.hash(req.body.newPassword, salt, function (err, hash) {
+
+                    dbo.collection('users').updateOne({
+                        _id: ObjectId(req.session._id),
+                        username: req.session.username,
+                        fullname: req.session.fullname,
+                        email: req.session.email,
+                    }, {
+                        $set: {
+                            username: req.body.newUsername,
+                            hashed_password:hash,
+                            fullname: req.body.newFullname,
+                            email: req.body.newEmail,
+                        }
+                    })
+
+
+                    req.session.username = req.body.newUsername
+                    req.session.fullname = req.body.newFullname
+                    req.session.email = req.body.newEmail
+                    res.redirect('index.html')
+                })
+            })
         }
     })
 })
 
-app.get('/delete',function (req,res){
-    MongoClient.connect(url, function(err,db){
+app.get('/delete', function (req, res) {
+    MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         else {
             const dbo = db.db('hiddenplaces-db');
@@ -399,7 +413,14 @@ app.post("/addComment", function (req, res, next) {
                 var username = req.session.username;
             }
             dbo.collection("places").find({name: req.body.commentId}).toArray((err, place) => {
-                dbo.collection("places").updateOne(place[0], { $push: { commentaries: {comment: req.body.comment, commentAuthor: username}}}, function(err, res) {
+                dbo.collection("places").updateOne(place[0], {
+                    $push: {
+                        commentaries: {
+                            comment: req.body.comment,
+                            commentAuthor: username
+                        }
+                    }
+                }, function (err, res) {
                     if (err) throw err;
                 });
             })

@@ -42,26 +42,47 @@
 </header>
 
 <div class="container">
-    <h1>Mon profil</h1>
-    <div id="info">
+    <h1>My profil</h1>
+    <div id="content">
         <p><span> Your username</span> : {{username}} </p>
         <p><span>Your fullname</span> : {{fullname}}</p>
         <p><span>Your Email</span> : {{email}}</p>
+        <button id="btnChangeMyData">Change my data</button>
+        <button id="btnDeleteAccount">Delete my account</button>
     </div>
-    <h1>Modifier ses données</h1>
-    <div id="changedon">
+</div>
+
+<div class="overlay_changeDataPopup" id="overlay_changeDataPopup">
+    <div class="content_changeDataPopup">
+        <h2>Modifier ses données<span class="btnCloseChangeDataPopup" id="btnCloseChangeDataPopup">&times;</span></h2>
         <form id="formulaire" action="changeData" method="post">
             <input name="newUsername" placeholder="new username" type="text" required>
+            <br>
             <input name="newFullname" placeholder="new fullname" type="text" required>
+            <br>
             <input name="newEmail" placeholder="example@hotmail.com" type="email" required>
+            <br>
             <input name="newPassword" placeholder="new password" type="password" required>
+            <br>
             <input name="confirmNewPassword" placeholder="confirm password" type="password" required>
-            <button type="submit">Confirmer</button>
+            <br>
+            <button class="btnChangeDataPopup" type="submit">Confirm</button>
         </form>
     </div>
-    <form class="delete_btn" action="/delete" method="get">
-        <button class="delete_account_btn" id="delete_account_btn" >Supprimer mon compte</button>
-    </form>
+
+</div>
+
+<div class="overlay_deleteAccountPopup" id="overlay_deleteAccountPopup">
+    <div class="content_deleteAccountPopup" id="content_deleteAccountPopup">
+        <h2>Supprimer mon compte<span class="btnCloseDeleteAccountPopup" id="btnCloseDeleteAccountPopup">&times;</span></h2>
+        <h4>You are about to delete your account, the places you have added to the site will be kept and still readable.<br>
+            All your counter data will be permanently deleted.<br>
+            To confirm that you want to delete your account, please insert your e-mail.</h4>
+        <form class="delete_btn" action="delete" method="get">
+            <input class="delete_confirm_email" id="delete_confirm_email" placeholder="YourEmail@hotmail.com">
+            <button class="delete_account_btn" id="delete_account_btn" type="submit">Delete my account</button>
+        </form>
+    </div>
 </div>
 
 <div style="display:{{style}}" id="overlay" class="overlay">
@@ -73,18 +94,37 @@
 </div>
 
 <script>
-    var btnClose = document.getElementById("btnClose");
-    var overlay = document.getElementById("overlay");
-
-    btnClose.addEventListener("click", closePopup);
-
-    function closePopup() {
-        overlay.style.display = "none";
+    //Change Data
+    var btnChangeMyData = document.getElementById('btnChangeMyData')
+    var btnCloseChangeDataPopup = document.getElementById('btnCloseChangeDataPopup')
+    var overlayChangeDataPopup = document.getElementById('overlay_changeDataPopup')
+    
+    btnChangeMyData.addEventListener('click', openChangeDataPopup)
+    btnCloseChangeDataPopup.addEventListener('click', closeChangeDataPopup)
+    
+    function openChangeDataPopup() {
+        overlayChangeDataPopup.style.display = 'block'
+    }
+    
+    function closeChangeDataPopup() {
+        overlayChangeDataPopup.style.display = 'none'
     }
 
-    document.addEventListener("keypress", function(event) {
-        overlay.style.display = 'none'
-    });
+    //Delete account
+    var overlay_deleteAccountPopup = document.getElementById('overlay_deleteAccountPopup')
+    var btnCloseDeleteAccountPopup = document.getElementById('btnCloseDeleteAccountPopup')
+    var btnDeleteAccount = document.getElementById('btnDeleteAccount')
+
+    btnDeleteAccount.addEventListener('click', openDeleteAccountPopup)
+    btnCloseDeleteAccountPopup.addEventListener('click', closeDeleteAccountPopup)
+
+    function openDeleteAccountPopup() {
+        overlay_deleteAccountPopup.style.display = 'block'
+    }
+
+    function closeDeleteAccountPopup() {
+        overlay_deleteAccountPopup.style.display = 'none'
+    }
 </script>
 
 </body>
