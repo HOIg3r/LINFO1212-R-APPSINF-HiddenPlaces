@@ -109,7 +109,14 @@ Vous devriez voir apparaitre le lien du site internet
 ```text
 ---- Site: https://localhost:8080/index.html ----
 ```
-Et voila le site web est en marche vous pouvez vous rendre dessus 
+Et voila le site web est en marche vous pouvez vous rendre dessus et commencer a l'utiliser
+Un compte de base existe déja:
+
+
+| Username  | Fullname | Email               |Password|
+|:---------:|:--------:|:-------------------:|:------:|
+|Admin      |Admin     |Admin@HiddenPlace.com|@dmin123|
+
 
 ### lancer les test dans le CMD
 

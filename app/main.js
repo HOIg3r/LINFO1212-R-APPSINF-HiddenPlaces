@@ -106,29 +106,27 @@ app.post('/login', (req, res,) => {
         res.redirect('login.html')
     }
     MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        else {
-            const dbo = db.db('hiddenplaces-db');
-            dbo.collection('users').findOne({username: req.body.login_identifiant}, (err, doc) => {
-                if (doc == null) {
-                    res.redirect('login.html')
-                } else {
-                    // Compare the password and the hashed password stocked in the DB
-                    bcrypt.compare(req.body.login_password, doc.hashed_password, function (err, resBcrypt) {
-                        if (resBcrypt) {
-                            req.session._id = doc._id
-                            req.session.username = doc.username
-                            req.session.fullname = doc.fullname
-                            req.session.email = doc.email
-                            req.session.errorMessage = "";
-                            res.redirect('index.html')
-                        } else {
-                            res.redirect('login.html')
-                        }
-                    });
-                }
-            })
-        }
+        const dbo = db.db('hiddenplaces-db');
+        dbo.collection('users').findOne({$or:[{username:req.body.login_identifiant},{email:req.body.login_identifiant}]},(err,doc)=>{
+            if (doc == null) {
+                res.redirect('login.html')
+            } else {
+                // Compare the password and the hashed password stocked in the DB
+                bcrypt.compare(req.body.login_password, doc.hashed_password, function (err, resBcrypt) {
+                    if (resBcrypt) {
+                        req.session._id = doc._id
+                        req.session.username = doc.username
+                        req.session.fullname = doc.fullname
+                        req.session.email = doc.email
+                        req.session.errorMessage = "";
+                        res.redirect('index.html')
+                    } else {
+                        res.redirect('login.html')
+                    }
+                });
+            }
+        })
+
     })
 })
 
