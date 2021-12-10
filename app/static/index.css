@@ -18,10 +18,16 @@ html {
 
 }
 
-.welcome_message span{
+.title span{
     background-color:black;
     padding: 5px 10px;
+}
 
+.message span{
+    width:450px;
+    padding: 5px 10px;
+    background-color:black;
+    line-height:30px;
 }
 
 .welcome_message img{

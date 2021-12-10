@@ -5,14 +5,15 @@
 - [ ] Ajouter des commentaire un peu partouts 
 - [ ] rendre le code lisible
 - [X] commentaires
-- [ ] ~~rating système~~ abandoned
+- [ ] ~~rating système~~ _abandoned_
 - [ ] finir README
 - [ ] Rapport
 - [X] Supprimer compte
 - [X] creer BD de base
 - [X] Fix dropdown
-- [ ] Welcome message
+- [X] Welcome message
 - [X] Logo
+- [ ] Finir les Tests
 
 ### Table des matières
 
