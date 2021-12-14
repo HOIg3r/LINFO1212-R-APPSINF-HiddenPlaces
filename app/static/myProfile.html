@@ -125,6 +125,16 @@
     function closeDeleteAccountPopup() {
         overlay_deleteAccountPopup.style.display = 'none'
     }
+
+    //ErrorMessage
+    var btnCloseErrorMessagePopup = document.getElementById('btnClose')
+    var overlayErrorMessagePopup = document.getElementById('overlay')
+
+    btnCloseErrorMessagePopup.addEventListener('click', closeErrorMessagePopup )
+
+    function closeErrorMessagePopup() {
+        overlayErrorMessagePopup.style.display = 'none'
+    }
 </script>
 
 <footer>

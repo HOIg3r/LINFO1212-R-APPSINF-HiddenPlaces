@@ -33,7 +33,7 @@ app.use(session({
         path: '/',
         httpOnly: true,
         secure: true,
-        maxAge: null,
+        maxAge: 7200000 * 2,//4h of session cookie after that you must reconnect
     }
 }))
 
@@ -47,12 +47,10 @@ app.set('views', 'static');
 
 
 //render the good html
-
-
 //Send index.html, Send errormessage on a popup if error and connect the user if is connected with cookie
 app.get('/index.html', function (req, res) {
 
-    if (req.session.errorMessage === '' || req.session.errorMessage === undefined) {
+    if (req.session.errorMessage === undefined) {
 
         if (req.session.username !== undefined) {
             res.render('index.html', {
@@ -75,7 +73,7 @@ app.get('/index.html', function (req, res) {
                 errorMessage: req.session.errorMessage
             })
             //delete the errorMessage
-            req.session.errorMessage = ''
+            req.session.errorMessage = undefined
         } else {
             res.render('index.html', {
                 username: 'Anonyme',
@@ -83,7 +81,7 @@ app.get('/index.html', function (req, res) {
                 errorMessage: req.session.errorMessage
             })
             //delete the errorMessage
-            req.session.errorMessage = ''
+            req.session.errorMessage = undefined
         }
 
     }
@@ -95,8 +93,11 @@ app.get('/login.html', function (req, res) {
     if (req.session.username !== undefined) {
         req.session.errorMessage = "You are already connected, please disconnect before login or sign-up a other account"
         res.redirect('index.html')
-    } else {
+    } else if (req.session.errorMessage === undefined) {
         res.render('login.html', {username: "Anonyme"})
+    } else {
+        res.render('login.html', {username: "Anonyme", errorMessage: req.session.errorMessage, style: 'block'})
+        req.session.errorMessage = undefined
     }
 })
 
@@ -107,8 +108,9 @@ app.post('/login', (req, res,) => {
     }
     MongoClient.connect(url, function (err, db) {
         const dbo = db.db('hiddenplaces-db');
-        dbo.collection('users').findOne({$or:[{username:req.body.login_identifiant},{email:req.body.login_identifiant}]},(err,doc)=>{
+        dbo.collection('users').findOne({$or: [{username: req.body.login_identifiant}, {email: req.body.login_identifiant}]}, (err, doc) => {
             if (doc == null) {
+                req.session.errorMessage = 'No account with the username : ' + req.body.login_identifiant + ' was found, maybe you are not registered.'
                 res.redirect('login.html')
             } else {
                 // Compare the password and the hashed password stocked in the DB
@@ -118,9 +120,10 @@ app.post('/login', (req, res,) => {
                         req.session.username = doc.username
                         req.session.fullname = doc.fullname
                         req.session.email = doc.email
-                        req.session.errorMessage = "";
+                        req.session.errorMessage = undefined
                         res.redirect('index.html')
                     } else {
+                        req.session.errorMessage = "Wrong password"
                         res.redirect('login.html')
                     }
                 });
@@ -138,12 +141,14 @@ app.post('/signup', (req, res,) => {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         if (req.body.signup_password !== req.body.signup_confirmed_password) {
+            req.session.errorMessage = 'The password and the confirmation password was not the same.'
             res.redirect('login.html')
         } else {
             const dbo = db.db('hiddenplaces-db');
             dbo.collection('users').findOne({username: req.body.signup_username}, (err, doc) => {
                 if (err) throw err;
                 if (doc != null) {
+                    req.session.errorMessage = "The username : '" + req.body.signup_username + "' is already taken. Try a other"
                     res.redirect('login.html')
                 } else {
 
@@ -161,7 +166,7 @@ app.post('/signup', (req, res,) => {
                     req.session.username = req.body.signup_username
                     req.session.fullname = req.body.signup_fullname
                     req.session.email = req.body.signup_email
-                    req.session.errorMessage = ""
+                    req.session.errorMessage = undefined
                     res.redirect('index.html')
                 }
             })
@@ -193,7 +198,7 @@ app.post("/addplace", function (req, res, next) {
             style: 'block',
             errorMessage: req.session.errorMessage
         })
-        req.session.errorMessage = ''
+        req.session.errorMessage = undefined
     } else {
         MongoClient.connect(url, function (err, db) {
             if (err) throw err;
@@ -289,7 +294,16 @@ app.post("/addComment", function (req, res, next) {
 
 // send Myprofile if connected if not send index with a errormessage
 app.get('/myProfile.html', function (req, res) {
-    if (req.session.username !== undefined) {
+    if (req.session.errorMessage !== undefined) {
+        res.render('myProfile.html', {
+            username: req.session.username,
+            fullname: req.session.fullname,
+            email: req.session.email,
+            errorMessage: req.session.errorMessage,
+            style: 'block'
+        })
+        req.session.errorMessage = undefined;
+    } else if (req.session.username !== undefined) {
         res.render('myProfile.html', {
             username: req.session.username,
             fullname: req.session.fullname,
@@ -308,34 +322,41 @@ app.post('/changeData', function (req, res) {
         if (err) throw err;
 
         if (req.body.newPassword !== req.body.confirmNewPassword) {
+            req.session.errorMessage = 'The password is not the same as the confirm password'
             res.redirect('myProfile.html')
 
         } else {
-
             const dbo = db.db('hiddenplaces-db');
+            dbo.collection('users').findOne({username: req.body.newUsername}, (err, doc) => {
+                if (err) throw err;
+                if (doc) {
+                    req.session.errorMessage = "The username : '" + req.body.newUsername + "' is already taken. Try a other"
+                    res.redirect('myProfile.html')
+                } else {
+                    bcrypt.genSalt(10, function (err, salt) {
+                        bcrypt.hash(req.body.newPassword, salt, function (err, hash) {
 
-            bcrypt.genSalt(10, function (err, salt) {
-                bcrypt.hash(req.body.newPassword, salt, function (err, hash) {
+                            dbo.collection('users').updateOne({
+                                _id: ObjectId(req.session._id),
+                                username: req.session.username,
+                                fullname: req.session.fullname,
+                                email: req.session.email,
+                            }, {
+                                $set: {
+                                    username: req.body.newUsername,
+                                    hashed_password: hash,
+                                    fullname: req.body.newFullname,
+                                    email: req.body.newEmail,
+                                }
+                            })
 
-                    dbo.collection('users').updateOne({
-                        _id: ObjectId(req.session._id),
-                        username: req.session.username,
-                        fullname: req.session.fullname,
-                        email: req.session.email,
-                    }, {
-                        $set: {
-                            username: req.body.newUsername,
-                            hashed_password: hash,
-                            fullname: req.body.newFullname,
-                            email: req.body.newEmail,
-                        }
+                            req.session.username = req.body.newUsername
+                            req.session.fullname = req.body.newFullname
+                            req.session.email = req.body.newEmail
+                            res.redirect('index.html')
+                        })
                     })
-
-                    req.session.username = req.body.newUsername
-                    req.session.fullname = req.body.newFullname
-                    req.session.email = req.body.newEmail
-                    res.redirect('index.html')
-                })
+                }
             })
         }
     })
@@ -347,10 +368,9 @@ app.post('/delete', function (req, res) {
         if (err) throw err;
 
         if (req.session.email !== req.body.delete_confirm_email) {
+            req.session.errorMessage = 'The email you gave is not the same as your HiddenPlaces account'
             res.redirect("myProfile.html")
-        }
-
-        else {
+        } else {
 
             const dbo = db.db('hiddenplaces-db');
             dbo.collection('users').remove({
