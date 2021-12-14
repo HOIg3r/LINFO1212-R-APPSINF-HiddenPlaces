@@ -46,7 +46,7 @@
         </div>
     </header>
     <h1>Add a Place</h1>
-    <div id="map"></div>
+    <div id="map" name="map"></div>
 
     <div style="display:{{style}}" id="overlay" class="overlay">
         <div id="popup-errorMessage" class="popup-errorMessage">
@@ -102,7 +102,7 @@
             <textarea type="textarea" name="description" id="description" placeholder="Add a description" required></textarea>
             <input id="lati" type="hidden" name="latitude" value="" size ="40" required/>
             <input id="long" type="hidden" name="longitude" value="" size ="40" required/>
-            <button type="submit">Submit</button>
+            <button id="submit" type="submit">Submit</button>
         </form>
 </body>
 
