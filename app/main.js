@@ -147,11 +147,16 @@ app.post('/signup', (req, res,) => {
             res.redirect('login.html')
         } else {
             const dbo = db.db('hiddenplaces-db');
-            dbo.collection('users').findOne({username: req.body.signup_username}, (err, doc) => {
+            dbo.collection('users').findOne({$or:[{username: req.body.signup_username},{email:req.body.signup_email}]}, (err, doc) => {
                 if (err) throw err;
                 if (doc != null) {
-                    req.session.errorMessage = "The username : '" + req.body.signup_username + "' is already taken. Try a other"
-                    res.redirect('login.html')
+                    if(doc.username === req.body.signup_username){
+                        req.session.errorMessage = "The username : '" + req.body.signup_username + "' is already taken. Try a other"
+                        res.redirect('login.html')
+                    }else{
+                        req.session.errorMessage = "The email : '" + req.body.signup_email + "' is already taken. Try a other"
+                        res.redirect('login.html')
+                    }
                 } else {
 
                     bcrypt.genSalt(10, function (err, salt) {
@@ -192,7 +197,7 @@ app.get('/addPlaces.html', function (req, res) {
 })
 
 //add a places on the db
-app.post("/addplace", function (req, res, next) {
+app.post("/addplace", function (req, res) {
     if (req.body.latitude === "") {
         req.session.errorMessage = "You need to pick a location to add a place"
         res.render('addPlaces.html', {
@@ -267,7 +272,7 @@ app.get('/places.html', function (req, res) {
 });
 
 //can add a comment on every place
-app.post("/addComment", function (req, res, next) {
+app.post("/addComment", function (req, res) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         else {
@@ -285,7 +290,7 @@ app.post("/addComment", function (req, res, next) {
                             commentAuthor: username
                         }
                     }
-                }, function (err, res) {
+                }, function (err) {
                     if (err) throw err;
                 });
             })
