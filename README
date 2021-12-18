@@ -1,0 +1,109 @@
+LINFO1212 Groupe R Projet Final
+
+Table des matières:
+
+ - Introduction
+ - Thème du site web
+ - Prérequis
+ - Creer la base de données
+ - Lancer le serveur Host
+ - lancer les test dans le CMD
+
+Introduction
+---------------------------------------------------------------------------------------------------
+Le but de ce projet etais de mettre en place un site web dynamique grâce à HTML, CSS et JavaScript,
+en utilisant comme base de données MongoDB le tout héberger sur un server Node.JS
+
+Thème du site web
+---------------------------------------------------------------------------------------------------
+Notre site web a pour but de réunir les endroits à visiter au moins une fois dans sa vie.
+Ce site pourra aider de futur voyageur à trouver les meilleurs lieux à visiter dans une ville 
+ou pays qu'ils veulent apercevoir.
+Ils pourront aussi par la même occasion visiter des lieux à découvrir autour de chez vous qui sont
+selon d'autres utilisateurs de notre site web des lieux à absolument découvrir une fois dans sa vie.
+
+
+Prérequis
+---------------------------------------------------------------------------------------------------
+Afin de lancer notre site web, veuillez télécharger le dossier zip et l'extraire.
+Vous pouvez ensuite installer Node.JS et MongoDB
+
+Notre site utilise multiple modules pour fonctionner, en voici la liste :
+
+ - @jest/globals
+ - bcryptjs
+ - body-parser
+ - consolidate
+ - express
+ - express-session
+ - fs
+ - hogan
+ - https
+ - jest
+ - mongo-image-converter
+ - mongodb
+ - nlp-js-tools-french
+ - selenium-webdriver
+
+Pour les installer vous avez 2 solutions:
+
+Avant tous, ouvrez un terminal et rendez vous dans le fichier LINFO1212-R-APPSINF-HiddenPlaces grâce a la commande cd..
+
+Ensuite, soit vous:
+
+	Les installer un par un avec la commande : 
+		npm install Le_nom_du_module
+
+	Les installer tous d'un coup:
+
+		si le fichier package.json se trouve bien dans le fichier ou vous etes situer
+		vous pouvez lancer la commande suivante:
+			npm install
+
+Creer la base de données
+-----------------------------------------------------------------------------------------------------------------
+Avant de commencer assurer vous d'avoir installer MongoDB ainsi que les outils et que tous soit bien dans votre PATH
+
+Dans le CMD, rendez-vous dans le fichier hiddenplaces-db du projet avec la commande "cd .."
+Lancer la commande:
+	"mongod --dbpath ."
+
+Lancer un autre CMD et render vous dans le fichier LINFO1212-R-APPSINF-HiddenPlaces du projet et lancez ces commandes une apres l'autres
+
+"mongoimport -d hiddenplaces-db -c users user.json"
+"mongoimport -d hiddenplaces-db -c places places.json"
+"mongoimport -d hiddenplaces-db -c geojson geojson.json"
+
+Lancer le serveur Host
+-----------------------------------------------------------------------------------------------------------------
+Rendez-vous dans le fichier "app" et lancer la commande
+
+	"Node main.js"
+
+Vous devriez voir apparaitre le lien du site internet
+
+"---- Site: https://localhost:8080/index.html ----"
+
+Et voila le site web est en marche vous pouvez vous rendre dessus et commencer a l'utiliser Un compte de base existe déja:
+
+Quand vous avez importer les fichers de la base de données nous avons crée une compte admin qui sera déja implémenter
+Mais vous pouvez aussi crée votre propre compte.
+
+| Username  | Fullname | Email               |Password|
+|-----------|----------|---------------------|--------|
+|   Admin   |   Admin  |Admin@HiddenPlace.com|@dmin123|
+
+lancer les test dans le CMD
+-------------------------------------------------------------------------------------------------------------------
+Pour lancer les test il faut:
+
+ - Installer la version de Chrome driver en fonction de la version de votre navigateur Google Chrome
+ - Une fois téléchargé, bouger le fichier chromedriver.exe dans le fichier LINFO1212-R-APPSINF-HiddenPlaces
+ - Vous pouvez aussi ajouter chromedriver.exe à votre PATH
+ - Une fois cela fait rendez-vous dans votre CMD dans le fichier app
+ - Dans un autre CMD lancer le serveur du site web comme montré précédemment
+ - Ensuite retourner dans le premier CMD et entrez la commande npm test dans le CMD
+
+Voilà les test s'effectue et vous disent s'ils sont réussi ou pas.
+
+Bien evidemment, vous pouvez aussi lancer les tests dans votre IDE
