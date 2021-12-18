@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "HiddenPlaces",
   "scripts": {
-    "test":"jest"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
