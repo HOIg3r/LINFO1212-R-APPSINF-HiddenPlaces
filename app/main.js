@@ -22,11 +22,13 @@ let fs = require('fs');
 let NlpjsTFr = require('nlp-js-tools-french');
 let bcrypt = require('bcryptjs');
 const {ObjectId} = require("mongodb");
+let crypto = require('crypto');
 
 
 // Create the Cookie settings
 app.use(session({
-    secret: 'HiDdEnPlAcEsRoJaNe1212nveEnfEZ',
+    //Random secret each time we restart the server
+    secret: crypto.randomBytes(20).toString("hex"),
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -38,8 +40,8 @@ app.use(session({
 }))
 
 //Create body for the info send by form
-app.use(bodyParser.json({limit: '16mb', extended: true}))
-app.use(bodyParser.urlencoded({limit: '16mb', extended: true}))
+app.use(bodyParser.json({limit: '16mb', extended:false}))
+app.use(bodyParser.urlencoded({limit: '16mb', extended: false}))
 
 //use hogan and set the files with HTML and CSS
 app.engine('html', consolidate.hogan);
