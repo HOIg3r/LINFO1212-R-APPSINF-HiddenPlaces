@@ -35,9 +35,14 @@ app.use(session({
         path: '/',
         httpOnly: true,
         secure: true,
-        maxAge: 7200000 * 2,//4h of session cookie after that you must reconnect
+        maxAge: 600000,//10 min of session cookie after that you must reconnect
     }
 }))
+
+// At each action on the site the maxAge is given at the beginning
+function validateCookie(req,res) {
+    const { maxAge } = req;
+}
 
 //Create body for the info send by form
 app.use(bodyParser.json({limit: '16mb', extended:false}))
@@ -51,7 +56,7 @@ app.set('views', 'static');
 //render the good html
 //Send index.html, Send errormessage on a popup if error and connect the user if is connected with cookie
 app.get('/index.html', function (req, res) {
-
+    validateCookie(req,res)
     if (req.session.errorMessage === undefined) {
 
         if (req.session.username !== undefined) {
@@ -92,6 +97,7 @@ app.get('/index.html', function (req, res) {
 
 // send login.html, redirect on index.html whit errormessage popup if user already connected
 app.get('/login.html', function (req, res) {
+    validateCookie(req,res)
     if (req.session.username !== undefined) {
         req.session.errorMessage = "You are already connected, please disconnect before login or sign-up a other account"
         res.redirect('index.html')
@@ -105,6 +111,7 @@ app.get('/login.html', function (req, res) {
 
 // check if user in db and log it if exist, if not send login.html and don't connect
 app.post('/login', (req, res,) => {
+    validateCookie(req,res)
     if (req.session.username !== undefined) {
         res.redirect('login.html')
     }
@@ -137,6 +144,7 @@ app.post('/login', (req, res,) => {
 
 // sinup user if all input are correct
 app.post('/signup', (req, res,) => {
+    validateCookie(req,res)
     if (req.session.username !== undefined) {
         res.redirect('login.html')
     }
@@ -185,6 +193,7 @@ app.post('/signup', (req, res,) => {
 
 // sned addPlace only if connected
 app.get('/addPlaces.html', function (req, res) {
+    validateCookie(req,res)
     if (req.session.username !== undefined) {
         res.render('addPlaces.html', {
             username: req.session.username
@@ -198,6 +207,7 @@ app.get('/addPlaces.html', function (req, res) {
 
 //add a places on the db
 app.post("/addplace", function (req, res) {
+    validateCookie(req,res)
     if (req.body.latitude === "") {
         req.session.errorMessage = "You need to pick a location to add a place"
         res.render('addPlaces.html', {
@@ -244,6 +254,7 @@ app.post("/addplace", function (req, res) {
 
 // send Places with the places on the map
 app.get('/places.html', function (req, res) {
+    validateCookie(req,res)
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         else {
@@ -273,6 +284,7 @@ app.get('/places.html', function (req, res) {
 
 //can add a comment on every place
 app.post("/addComment", function (req, res) {
+    validateCookie(req,res)
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         else {
@@ -301,6 +313,7 @@ app.post("/addComment", function (req, res) {
 
 // send Myprofile if connected if not send index with a errormessage
 app.get('/myProfile.html', function (req, res) {
+    validateCookie(req,res)
     if (req.session.errorMessage !== undefined) {
         res.render('myProfile.html', {
             username: req.session.username,
@@ -325,6 +338,7 @@ app.get('/myProfile.html', function (req, res) {
 
 // change the data of the account
 app.post('/changeData', function (req, res) {
+    validateCookie(req,res)
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
 
@@ -371,6 +385,7 @@ app.post('/changeData', function (req, res) {
 
 //delete the account
 app.post('/delete', function (req, res) {
+    validateCookie(req,res)
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
 
@@ -395,12 +410,14 @@ app.post('/delete', function (req, res) {
 
 //disconnect the user
 app.get('/logout.html', function (req, res) {
+    validateCookie(req,res)
     req.session.destroy()
     res.redirect('index.html')
 })
 
 // show the search
 app.post("/search", function (req, res, next) {
+    validateCookie(req,res)
     MongoClient.connect(url, function (err, db) {
         let config = {
             tagTypes: ['art', 'ver', 'nom'],
