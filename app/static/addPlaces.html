@@ -68,7 +68,7 @@
             zoomOffset: -1,
             accessToken: 'pk.eyJ1IjoibGViZWxnZSIsImEiOiJja3djNjk0cXMwN241MnR0M292NGJqcDU5In0.-NAdVQ9n-CIrhhRDd1vv5w'
         }).addTo(mymap);
-        var mp = {};
+        var mp = new L.marker([50.70193521337628,4.4604133131427925]).addTo(mymap);
         mymap.on("click", function(e){
             if (mp != undefined) {
                 mymap.removeLayer(mp);
@@ -100,8 +100,8 @@
             <!-- <input type="file" accept="image/*" required> !-->
             <input type="text" name="name" id="name" placeholder="Add a name" required>
             <textarea type="textarea" name="description" id="description" placeholder="Add a description" required></textarea>
-            <input id="lati" type="hidden" name="latitude" value="" size ="40" required/>
-            <input id="long" type="hidden" name="longitude" value="" size ="40" required/>
+            <input id="lati" type="hidden" name="latitude" value="50.70193521337628" size ="40" required/>
+            <input id="long" type="hidden" name="longitude" value="4.4604133131427925" size ="40" required/>
             <button id="submit" type="submit">Submit</button>
         </form>
 </body>
