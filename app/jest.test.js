@@ -1,5 +1,5 @@
 const {Builder, By, Key ,until, Capabilities, Capability} = require('selenium-webdriver');
-const script = require('jest');
+
 const {beforeAll, expect} = require('@jest/globals');
 const crypto = require('crypto')
 
@@ -135,14 +135,14 @@ describe('Test the site when is connected', () => {
     })
 
     test('Can add a comment on a places', async () =>{
-        //Add a comment to the first place on the list
+        //Add a comment to the last place on the list
         await driver.get('https://localhost:8080/places.html')
-        await driver.findElement(By.xpath('//*[@id="London Bridge"]')).click()
+        await driver.findElement(By.xpath('/html/body/div[2]/div[2]/table/tbody[2]/tr[last()]')).click()
         await driver.findElement(By.name('comment')).sendKeys('This is a test of comment',Key.RETURN)
-
     })
 
     test('Can use search bar',async () =>{
+        await driver.get('https://localhost:8080/index.html')
         await driver.findElement(By.xpath('//*[@id="myTopnav"]/div[1]/form/input')).sendKeys('test',Key.RETURN)
         let title = await driver.getTitle()
         expect(title).toContain('Places')
@@ -176,7 +176,6 @@ describe('Test the site when is connected', () => {
         await driver.findElement(By.name('deleteAccount')).click()
 
         await driver.findElement(By.name('delete_confirm_email')).sendKeys(name +"@hotmail.com",Key.RETURN)
-        await driver.sleep(2000)
 
         title = await driver.getTitle()
         expect(title).toContain('Home')
