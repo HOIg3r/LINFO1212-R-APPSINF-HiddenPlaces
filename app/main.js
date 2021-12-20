@@ -35,28 +35,21 @@ app.use(session({
         path: '/',
         httpOnly: true,
         secure: true,
-        maxAge: 600000,//10 min of session cookie after that you must reconnect
+        maxAge: 7200000,//2 hour of session cookie after that you must reconnect
     }
 }))
 
-// At each action on the site the maxAge is given at the beginning
-function validateCookie(req,res) {
-    const { maxAge } = req;
-}
-
 //Create body for the info send by form
-app.use(bodyParser.json({limit: '16mb', extended:false}))
+app.use(bodyParser.json({limit: '16mb', extended: false}))
 app.use(bodyParser.urlencoded({limit: '16mb', extended: false}))
 
 //use hogan and set the files with HTML and CSS
 app.engine('html', consolidate.hogan);
 app.set('views', 'static');
 
-
 //render the good html
 //Send index.html, Send errormessage on a popup if error and connect the user if is connected with cookie
 app.get('/index.html', function (req, res) {
-    validateCookie(req,res)
     if (req.session.errorMessage === undefined) {
 
         if (req.session.username !== undefined) {
@@ -106,8 +99,8 @@ app.get('/login.html', function (req, res) {
     }
 })
 
-// check if user in db and log it if exist, if not send login.html and don't connect
-app.post('/login', (req, res,) => {
+//Login user: check if user in db and log it if exist, if not send login.html and errorMessage and login user
+app.post('/login', (req, res) => {
     if (req.session.username !== undefined) {
         res.redirect('login.html')
     }
@@ -150,13 +143,13 @@ app.post('/signup', (req, res,) => {
             db.close().then(r => res.redirect('login.html'))
         } else {
             const dbo = db.db('hiddenplaces-db');
-            dbo.collection('users').findOne({$or:[{username: req.body.signup_username},{email:req.body.signup_email}]}, (err, doc) => {
+            dbo.collection('users').findOne({$or: [{username: req.body.signup_username}, {email: req.body.signup_email}]}, (err, doc) => {
                 if (err) throw err;
                 if (doc != null) {
-                    if(doc.username === req.body.signup_username){
+                    if (doc.username === req.body.signup_username) {
                         req.session.errorMessage = "The username : '" + req.body.signup_username + "' is already taken. Try a other"
                         res.redirect('login.html')
-                    }else{
+                    } else {
                         req.session.errorMessage = "The email : '" + req.body.signup_email + "' is already taken. Try a other"
                         res.redirect('login.html')
                     }
@@ -169,7 +162,7 @@ app.post('/signup', (req, res,) => {
                                 hashed_password: hash,
                                 fullname: req.body.signup_fullname,
                                 email: req.body.signup_email,
-                            }, function (err){
+                            }, function (err) {
                                 if (err) throw err;
                                 req.session.errorMessage = "You account has been successfully created. Now you can login at it."
                                 db.close()
@@ -223,7 +216,7 @@ app.post("/addplace", function (req, res) {
                         type: "Point",
                         coordinates: latlong
                     }
-                }, (err, doc) => {
+                }, (err) => {
                     if (err) throw err;
                 })
                 dbo.collection("places").insertOne({
@@ -233,7 +226,7 @@ app.post("/addplace", function (req, res) {
                     description: req.body.description,
                     author: req.session.username,
                     commentaries: []
-                }, (err, doc) => {
+                }, (err) => {
                     if (err) throw err;
                     db.close()
                     res.redirect("index.html")
@@ -263,9 +256,10 @@ app.get('/places.html', function (req, res) {
                     }
                     db.close().then(r =>
                         res.render('places.html', {
-                        username: "Anonyme",
-                        mapgeojson: mapgeojson,
-                        placelist: placelist})
+                            username: "Anonyme",
+                            mapgeojson: mapgeojson,
+                            placelist: placelist
+                        })
                     )
                 })
             })
@@ -341,13 +335,13 @@ app.post('/changeData', function (req, res) {
             dbo.collection('users').findOne({$or: [{username: req.body.newUsername}, {email: req.body.newEmail}]}, (err, doc) => {
                 if (err) throw err;
                 if (doc != null) {
-                    if(doc.username === req.body.signup_username){
+                    if (doc.username === req.body.signup_username) {
                         req.session.errorMessage = "The username : '" + req.body.signup_username + "' is already taken. Try a other"
-                        db.close().then(r =>res.redirect('login.html'))
+                        db.close().then(r => res.redirect('login.html'))
 
-                    }else{
+                    } else {
                         req.session.errorMessage = "The email : '" + req.body.signup_email + "' is already taken. Try a other"
-                        db.close().then(r =>res.redirect('login.html') )
+                        db.close().then(r => res.redirect('login.html'))
                     }
                 } else {
                     bcrypt.genSalt(10, function (err, salt) {
@@ -365,7 +359,8 @@ app.post('/changeData', function (req, res) {
                                     fullname: req.body.newFullname,
                                     email: req.body.newEmail,
                                 }
-                            },function (err){
+                            }, function (err) {
+                                if (err) throw err;
                                 req.session.username = req.body.newUsername
                                 req.session.fullname = req.body.newFullname
                                 req.session.email = req.body.newEmail
@@ -397,9 +392,9 @@ app.post('/delete', function (req, res) {
                 username: req.session.username,
                 fullname: req.session.fullname,
                 email: req.session.email,
-            },function(err){
-                db.close()
-                res.redirect('logout.html')
+            }, function (err) {
+                db.close().then(r => res.redirect('logout.html'))
+
             })
 
         }
@@ -471,7 +466,7 @@ app.post("/search", function (req, res, next) {
                                             })
                                         )
                                     }
-                                    db.close().then(r=>
+                                    db.close().then(r =>
                                         res.render('places.html', {
                                             username: "Anonyme",
                                             mapgeojson: mapgeojson,
