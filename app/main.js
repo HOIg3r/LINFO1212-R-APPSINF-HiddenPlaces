@@ -147,7 +147,7 @@ app.post('/signup', (req, res,) => {
         if (err) throw err;
         if (req.body.signup_password !== req.body.signup_confirmed_password) {
             req.session.errorMessage = 'The password and the confirmation password was not the same.'
-            res.redirect('login.html')
+            db.close().then(r => res.redirect('login.html'))
         } else {
             const dbo = db.db('hiddenplaces-db');
             dbo.collection('users').findOne({$or:[{username: req.body.signup_username},{email:req.body.signup_email}]}, (err, doc) => {
@@ -169,15 +169,14 @@ app.post('/signup', (req, res,) => {
                                 hashed_password: hash,
                                 fullname: req.body.signup_fullname,
                                 email: req.body.signup_email,
-                            }).then(r =>
+                            }, function (err){
+                                if (err) throw err;
+                                req.session.errorMessage = "You account has been successfully created. Now you can login at it."
                                 db.close()
-                        )})
+                                res.redirect('login.html')
+                            })
+                        })
                     })
-                    req.session.username = req.body.signup_username
-                    req.session.fullname = req.body.signup_fullname
-                    req.session.email = req.body.signup_email
-                    req.session.errorMessage = undefined
-                    res.redirect('index.html')
                 }
             })
         }
@@ -187,7 +186,6 @@ app.post('/signup', (req, res,) => {
 // sned addPlace only if connected
 app.get('/addPlaces.html', function (req, res) {
     if (req.session.username !== undefined) {
-        validateCookie(req,res)
         res.render('addPlaces.html', {
             username: req.session.username
         })
@@ -237,8 +235,9 @@ app.post("/addplace", function (req, res) {
                     commentaries: []
                 }, (err, doc) => {
                     if (err) throw err;
+                    db.close()
+                    res.redirect("index.html")
                 })
-                res.redirect("index.html")
             }
         })
     }
@@ -262,11 +261,12 @@ app.get('/places.html', function (req, res) {
                             placelistJSON: placelist
                         })
                     }
-                    res.render('places.html', {
+                    db.close().then(r =>
+                        res.render('places.html', {
                         username: "Anonyme",
                         mapgeojson: mapgeojson,
-                        placelist: placelist
-                    })
+                        placelist: placelist})
+                    )
                 })
             })
         }
@@ -275,7 +275,6 @@ app.get('/places.html', function (req, res) {
 
 //can add a comment on every place
 app.post("/addComment", function (req, res) {
-    validateCookie(req,res)
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         else {
@@ -295,9 +294,12 @@ app.post("/addComment", function (req, res) {
                     }
                 }, function (err) {
                     if (err) throw err;
+                    db.close()
+                    res.redirect("places.html")
                 });
             })
-            res.redirect("places.html");
+
+
         }
     })
 });
@@ -305,7 +307,6 @@ app.post("/addComment", function (req, res) {
 // send Myprofile if connected if not send index with a errormessage
 app.get('/myProfile.html', function (req, res) {
     if (req.session.errorMessage !== undefined) {
-        validateCookie(req,res)
         res.render('myProfile.html', {
             username: req.session.username,
             fullname: req.session.fullname,
@@ -315,7 +316,6 @@ app.get('/myProfile.html', function (req, res) {
         })
         req.session.errorMessage = undefined;
     } else if (req.session.username !== undefined) {
-        validateCookie(req,res)
         res.render('myProfile.html', {
             username: req.session.username,
             fullname: req.session.fullname,
@@ -335,8 +335,7 @@ app.post('/changeData', function (req, res) {
 
         if (req.body.newPassword !== req.body.confirmNewPassword) {
             req.session.errorMessage = 'The password is not the same as the confirm password'
-            res.redirect('myProfile.html')
-
+            db.close().then(r => res.redirect('myProfile.html'))
         } else {
             const dbo = db.db('hiddenplaces-db');
             dbo.collection('users').findOne({$or: [{username: req.body.newUsername}, {email: req.body.newEmail}]}, (err, doc) => {
@@ -344,10 +343,11 @@ app.post('/changeData', function (req, res) {
                 if (doc != null) {
                     if(doc.username === req.body.signup_username){
                         req.session.errorMessage = "The username : '" + req.body.signup_username + "' is already taken. Try a other"
-                        res.redirect('login.html')
+                        db.close().then(r =>res.redirect('login.html'))
+
                     }else{
                         req.session.errorMessage = "The email : '" + req.body.signup_email + "' is already taken. Try a other"
-                        res.redirect('login.html')
+                        db.close().then(r =>res.redirect('login.html') )
                     }
                 } else {
                     bcrypt.genSalt(10, function (err, salt) {
@@ -365,12 +365,13 @@ app.post('/changeData', function (req, res) {
                                     fullname: req.body.newFullname,
                                     email: req.body.newEmail,
                                 }
+                            },function (err){
+                                req.session.username = req.body.newUsername
+                                req.session.fullname = req.body.newFullname
+                                req.session.email = req.body.newEmail
+                                db.close()
+                                res.redirect('index.html')
                             })
-
-                            req.session.username = req.body.newUsername
-                            req.session.fullname = req.body.newFullname
-                            req.session.email = req.body.newEmail
-                            res.redirect('index.html')
                         })
                     })
                 }
@@ -396,10 +397,11 @@ app.post('/delete', function (req, res) {
                 username: req.session.username,
                 fullname: req.session.fullname,
                 email: req.session.email,
+            },function(err){
+                db.close()
+                res.redirect('logout.html')
             })
 
-            req.session.destroy()
-            res.redirect('index.html')
         }
     })
 })
@@ -446,18 +448,8 @@ app.post("/search", function (req, res, next) {
                     }
                 }).toArray((err, placelist) => {
                     if (placelist.length === 0) {
-                        if (req.session.username !== undefined) {
-                            res.render('index.html', {
-                                username: req.session.username,
-                                style: 'block',
-                                errorMessage: "No place was found"
-                            })
-                        }
-                        res.render('index.html', {
-                            username: "Anonyme",
-                            style: 'block',
-                            errorMessage: "No place was found"
-                        })
+                        req.session.errorMessage = "No place was found"
+                        db.close().then(r => res.redirect("index.html"))
                     } else {
                         dbo.collection("geojson").createIndex({"properties.name": "text"}).then(r => {
                             dbo.collection("geojson").find({
@@ -467,21 +459,25 @@ app.post("/search", function (req, res, next) {
                                 }
                             }).toArray((err, doc) => {
                                 if (err) {
-                                    console.log(err)
+                                    throw err;
                                 } else {
                                     var mapgeojson = JSON.stringify(doc);
                                     if (req.session.username !== undefined) {
+                                        db.close().then(r =>
+                                            res.render('places.html', {
+                                                username: req.session.username,
+                                                mapgeojson: mapgeojson,
+                                                placelist: placelist
+                                            })
+                                        )
+                                    }
+                                    db.close().then(r=>
                                         res.render('places.html', {
-                                            username: req.session.username,
+                                            username: "Anonyme",
                                             mapgeojson: mapgeojson,
                                             placelist: placelist
                                         })
-                                    }
-                                    res.render('places.html', {
-                                        username: "Anonyme",
-                                        mapgeojson: mapgeojson,
-                                        placelist: placelist
-                                    })
+                                    )
                                 }
                             })
                         })
