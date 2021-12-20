@@ -1,15 +1,16 @@
 const {Builder, By, Key ,until, Capabilities, Capability} = require('selenium-webdriver');
 const script = require('jest');
-const {beforeAll} = require('@jest/globals');
+const {beforeAll, expect} = require('@jest/globals');
 const crypto = require('crypto')
 
-const url = 'https://www.google.be/';
-
 let driver;
+
+// alow google to accept TLS certificate from HTTPS
 const capabilities = Capabilities.chrome();
 capabilities.set(Capability.ACCEPT_INSECURE_TLS_CERTS, true);
 
-var name = crypto.randomBytes(5).toString("hex")
+// A random name use to create account and other test
+let name = crypto.randomBytes(5).toString("hex");
 
 
 describe("Test every page on the site", () => {
@@ -124,12 +125,31 @@ describe('Test the site when is connected', () => {
         await driver.findElement(By.name('signup_password')).sendKeys(name)
         await driver.findElement(By.name('signup_confirmed_password')).sendKeys(name,Key.RETURN)
 
-        let title = await driver.getTitle()
-        expect(title).toContain('Home')
+        await driver.findElement(By.name('login_identifiant')).sendKeys(name)
+        await driver.findElement(By.name('login_password')).sendKeys(name,Key.RETURN)
+
         //chech if username on the navbar
         let username = await driver.findElement(By.css("p")).getText()
         expect(username).toContain(name)
 
+    })
+
+    test('Can add a comment on a places', async () =>{
+        //Add a comment to the first place on the list
+        await driver.get('https://localhost:8080/places.html')
+        await driver.findElement(By.xpath('//*[@id="London Bridge"]')).click()
+        await driver.findElement(By.name('comment')).sendKeys('This is a test of comment',Key.RETURN)
+
+    })
+
+    test('Can use search bar',async () =>{
+        await driver.findElement(By.xpath('//*[@id="myTopnav"]/div[1]/form/input')).sendKeys('test',Key.RETURN)
+        let title = await driver.getTitle()
+        expect(title).toContain('Places')
+
+        await driver.findElement(By.xpath('//*[@id="myTopnav"]/div[1]/form/input')).sendKeys('belguim',Key.RETURN)
+        title = await driver.getTitle()
+        expect(title).toContain('Home')
     })
 
     test('Can change data on the MyProfile Page and delete account',async () =>{
@@ -147,7 +167,7 @@ describe('Test the site when is connected', () => {
 
         let title = await driver.getTitle()
         expect(title).toContain('Home')
-        //chech if username on the navbar
+        //check if username on the navbar
         let username = await driver.findElement(By.css("p")).getText()
         expect(username).toContain(name)
 
@@ -164,6 +184,4 @@ describe('Test the site when is connected', () => {
         username = await driver.findElement(By.css("p")).getText()
         expect(username).toContain('Anonyme')
     })
-
-
 })
