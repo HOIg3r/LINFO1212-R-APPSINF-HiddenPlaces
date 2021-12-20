@@ -1,6 +1,6 @@
 // Import module
 
-//Module too run server
+//Module to run server
 let express = require('express');
 let session = require('express-session');
 let app = express();
@@ -90,14 +90,11 @@ app.get('/index.html', function (req, res) {
             //delete the errorMessage
             req.session.errorMessage = undefined
         }
-
     }
-
 })
 
 // send login.html, redirect on index.html whit errormessage popup if user already connected
 app.get('/login.html', function (req, res) {
-    validateCookie(req,res)
     if (req.session.username !== undefined) {
         req.session.errorMessage = "You are already connected, please disconnect before login or sign-up a other account"
         res.redirect('index.html')
@@ -111,7 +108,6 @@ app.get('/login.html', function (req, res) {
 
 // check if user in db and log it if exist, if not send login.html and don't connect
 app.post('/login', (req, res,) => {
-    validateCookie(req,res)
     if (req.session.username !== undefined) {
         res.redirect('login.html')
     }
@@ -144,7 +140,6 @@ app.post('/login', (req, res,) => {
 
 // sinup user if all input are correct
 app.post('/signup', (req, res,) => {
-    validateCookie(req,res)
     if (req.session.username !== undefined) {
         res.redirect('login.html')
     }
@@ -174,9 +169,9 @@ app.post('/signup', (req, res,) => {
                                 hashed_password: hash,
                                 fullname: req.body.signup_fullname,
                                 email: req.body.signup_email,
-                            })
-
-                        })
+                            }).then(r =>
+                                db.close()
+                        )})
                     })
                     req.session.username = req.body.signup_username
                     req.session.fullname = req.body.signup_fullname
@@ -187,14 +182,12 @@ app.post('/signup', (req, res,) => {
             })
         }
     })
-
-
 })
 
 // sned addPlace only if connected
 app.get('/addPlaces.html', function (req, res) {
-    validateCookie(req,res)
     if (req.session.username !== undefined) {
+        validateCookie(req,res)
         res.render('addPlaces.html', {
             username: req.session.username
         })
@@ -207,7 +200,6 @@ app.get('/addPlaces.html', function (req, res) {
 
 //add a places on the db
 app.post("/addplace", function (req, res) {
-    validateCookie(req,res)
     if (req.body.latitude === "") {
         req.session.errorMessage = "You need to pick a location to add a place"
         res.render('addPlaces.html', {
@@ -254,7 +246,6 @@ app.post("/addplace", function (req, res) {
 
 // send Places with the places on the map
 app.get('/places.html', function (req, res) {
-    validateCookie(req,res)
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         else {
@@ -313,8 +304,8 @@ app.post("/addComment", function (req, res) {
 
 // send Myprofile if connected if not send index with a errormessage
 app.get('/myProfile.html', function (req, res) {
-    validateCookie(req,res)
     if (req.session.errorMessage !== undefined) {
+        validateCookie(req,res)
         res.render('myProfile.html', {
             username: req.session.username,
             fullname: req.session.fullname,
@@ -324,6 +315,7 @@ app.get('/myProfile.html', function (req, res) {
         })
         req.session.errorMessage = undefined;
     } else if (req.session.username !== undefined) {
+        validateCookie(req,res)
         res.render('myProfile.html', {
             username: req.session.username,
             fullname: req.session.fullname,
@@ -338,7 +330,6 @@ app.get('/myProfile.html', function (req, res) {
 
 // change the data of the account
 app.post('/changeData', function (req, res) {
-    validateCookie(req,res)
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
 
@@ -348,11 +339,16 @@ app.post('/changeData', function (req, res) {
 
         } else {
             const dbo = db.db('hiddenplaces-db');
-            dbo.collection('users').findOne({username: req.body.newUsername}, (err, doc) => {
+            dbo.collection('users').findOne({$or: [{username: req.body.newUsername}, {email: req.body.newEmail}]}, (err, doc) => {
                 if (err) throw err;
-                if (doc) {
-                    req.session.errorMessage = "The username : '" + req.body.newUsername + "' is already taken. Try a other"
-                    res.redirect('myProfile.html')
+                if (doc != null) {
+                    if(doc.username === req.body.signup_username){
+                        req.session.errorMessage = "The username : '" + req.body.signup_username + "' is already taken. Try a other"
+                        res.redirect('login.html')
+                    }else{
+                        req.session.errorMessage = "The email : '" + req.body.signup_email + "' is already taken. Try a other"
+                        res.redirect('login.html')
+                    }
                 } else {
                     bcrypt.genSalt(10, function (err, salt) {
                         bcrypt.hash(req.body.newPassword, salt, function (err, hash) {
@@ -385,17 +381,17 @@ app.post('/changeData', function (req, res) {
 
 //delete the account
 app.post('/delete', function (req, res) {
-    validateCookie(req,res)
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
 
         if (req.session.email !== req.body.delete_confirm_email) {
             req.session.errorMessage = 'The email you gave is not the same as your HiddenPlaces account'
-            res.redirect("myProfile.html")
+            db.close().then(r => res.redirect("myProfile.html"))
+
         } else {
 
             const dbo = db.db('hiddenplaces-db');
-            dbo.collection('users').remove({
+            dbo.collection('users').deleteOne({
                 _id: ObjectId(req.session._id),
                 username: req.session.username,
                 fullname: req.session.fullname,
@@ -410,14 +406,12 @@ app.post('/delete', function (req, res) {
 
 //disconnect the user
 app.get('/logout.html', function (req, res) {
-    validateCookie(req,res)
     req.session.destroy()
     res.redirect('index.html')
 })
 
 // show the search
 app.post("/search", function (req, res, next) {
-    validateCookie(req,res)
     MongoClient.connect(url, function (err, db) {
         let config = {
             tagTypes: ['art', 'ver', 'nom'],
