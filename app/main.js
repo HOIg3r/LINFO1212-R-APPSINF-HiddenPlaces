@@ -35,9 +35,16 @@ app.use(session({
         path: '/',
         httpOnly: true,
         secure: true,
-        maxAge: 7200000,//2 hour of session cookie after that you must reconnect
+        maxAge: 600000,//10 minutes of session cookie after that you must reconnect
     }
 }))
+
+// This function updates the MaxAge at each action of the client on the site
+app.use(function(req,res,next){
+    req.session._action_of_client = Date();
+    req.session.touch();
+    next()
+})
 
 //Create body for the info send by form
 app.use(bodyParser.json({limit: '16mb', extended: false}))
