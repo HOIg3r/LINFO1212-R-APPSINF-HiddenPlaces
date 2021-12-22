@@ -6,8 +6,6 @@
 {"type":"Feature","properties":{"name":"Scout de Marche","popupContent":"Très gentil scout qui aide les habitants\r\nun léger problème avec la bière soi-disant","author":"Holger"},"geometry":{"type":"Point","coordinates":[5.341622829546395,50.2271686146351]}}
 {"type":"Feature","properties":{"name":"Statue of liberty","popupContent":"it's green and i like it","author":"Holger"},"geometry":{"type":"Point","coordinates":[-74.04451131842507,40.689173435362086]}}
 {"type":"Feature","properties":{"name":"Breedene plage","popupContent":"Very calm and beautiful","author":"Holger"},"geometry":{"type":"Point","coordinates":[2.958011626760708,51.24945423398071]}}
-{"type":"Feature","properties":{"name":"기념비 재단 파티","popupContent":"우리의 지도자 김정은에게 영광을","author":"Holger"},"geometry":{"type":"Point","coordinates":[125.776455402156,39.02775044216063]}}
 {"type":"Feature","properties":{"name":"L'Oie du lac","popupContent":"Attention elles mordent et attaquent","author":"Holger"},"geometry":{"type":"Point","coordinates":[4.608135223170394,50.66745345514593]}}
-{"type":"Feature","properties":{"name":"Nothing append in tiananmen square in 1989","popupContent":"1989年天安门广场什么都没发生","author":"Holger"},"geometry":{"type":"Point","coordinates":[116.3916063308716,39.90318925934133]}}
 {"type":"Feature","properties":{"name":"Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoc","popupContent":"The city with the longest name","author":"Holger"},"geometry":{"type":"Point","coordinates":[-4.200017447001302,53.22511409157579]}}
 {"type":"Feature","properties":{"name":"Never Gonna Give You Up","popupContent":"Never gonna let you down","author":"Holger"},"geometry":{"type":"Point","coordinates":[-0.22004628135618987,51.51309987021311]}}
