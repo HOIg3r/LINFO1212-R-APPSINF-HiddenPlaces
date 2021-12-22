@@ -10,7 +10,7 @@
    <li>Prérequis</li>
    <li>Creer la base de données</li>
    <li>Lancer le serveur Host</li>
-   <li>lancer les test dans le CMD</li>
+   <li>Lancer les test dans le CMD</li>
 
 </ol>
 
@@ -86,11 +86,13 @@ les [outils](https://www.mongodb.com/try/download/database-tools) et que tous so
    mongod --dbpath .
    ``` 
 3) Lancer un autre CMD et render vous dans le fichier `LINFO1212-R-APPSINF-HiddenPlaces` du projet et lancez ces commandes une apres l'autres
-   ```
+   ```shell
    mongoimport -d hiddenplaces-db -c users user.json
-   ...
+   ```
+   ```shell
    mongoimport -d hiddenplaces-db -c places places.json
-   ...
+   ```
+   ```shell
    mongoimport -d hiddenplaces-db -c geojson geojson.json
    ```
 
