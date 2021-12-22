@@ -1,22 +1,6 @@
 # LINFO1212 Groupe R Projet Final
 
 ---
-##TODO list
-
-- [ ] Ajouter des commentaire un peu partouts 
-- [ ] rendre le code lisible
-- [X] commentaires
-- [ ] ~~rating système~~ _abandoned_
-- [ ] finir README
-- [ ] Rapport
-- [X] Supprimer compte
-- [X] creer BD de base
-- [X] Fix dropdown
-- [X] Welcome message
-- [X] Logo
-- [ ] Finir les Tests
-- [ ] Creer collection qui contient les MDP hasher des session
-
 
 ### Table des matières
 
@@ -62,7 +46,6 @@ Notre site utilise multiple modules pour fonctionner, en voici la liste :
     <li>hogan</li>
     <li>https</li>
     <li>jest</li>
-    <li>mongo-image-converter</li>
     <li>mongodb</li>
     <li>nlp-js-tools-french</li>
     <li>selenium-webdriver</li>
@@ -144,10 +127,10 @@ Pour lancer les test il faut:
    version de votre navigateur Google Chrome
 2) Une fois téléchargé, bouger le fichier `chromedriver.exe` dans le fichier `LINFO1212-R-APPSINF-HiddenPlaces`
 3) Vous pouvez aussi ajouter `chromedriver.exe` à votre PATH
-4) Une fois cela fait rendez-vous dans votre CMD dans le fichier `app`
+4) Une fois cela fait rendez-vous dans votre CMD dans le fichier `LINFO1212-R-APPSINF-HiddenPlaces/test/`
 5) Dans un autre CMD lancer le serveur du site web comme montré précédemment
 6) Ensuite retourner dans le premier CMD et entrez la commande ```npm test``` dans le CMD
 
-Voilà les test s'effectue et vous disent s'ils sont réussi ou pas.
+Voilà les tests s'effectuent et vous disent s'ils sont réussis ou pas.
 
-Bien evidemment, vous pouvez aussi lancer les tests dans votre IDE
+Bien évidemment, vous pouvez aussi lancer les tests dans votre IDE

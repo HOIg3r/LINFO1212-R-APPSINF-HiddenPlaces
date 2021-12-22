@@ -35,7 +35,7 @@ app.use(session({
         path: '/',
         httpOnly: true,
         secure: true,
-        maxAge: 600000,//10 minutes of session cookie after that you must reconnect
+        maxAge: 30000,//10 minutes of session cookie after that you must reconnect
     }
 }))
 
