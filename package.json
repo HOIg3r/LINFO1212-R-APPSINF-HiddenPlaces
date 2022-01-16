@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "HiddenPlaces",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node app/main.js"
   },
   "repository": {
     "type": "git",

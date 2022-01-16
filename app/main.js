@@ -40,7 +40,7 @@ app.use(session({
 }))
 
 // This function updates the MaxAge at each action of the client on the site
-app.use(function(req,res,next){
+app.use(function (req, res, next) {
     req.session._action_of_client = Date();
     req.session.touch();
     next()
@@ -134,7 +134,6 @@ app.post('/login', (req, res) => {
                 });
             }
         })
-
     })
 })
 
@@ -183,7 +182,7 @@ app.post('/signup', (req, res,) => {
     })
 })
 
-// sned addPlace only if connected
+// send addPlace only if connected
 app.get('/addPlaces.html', function (req, res) {
     if (req.session.username !== undefined) {
         res.render('addPlaces.html', {
@@ -494,8 +493,8 @@ app.post("/search", function (req, res, next) {
 // Start the site
 app.use(express.static('static'));
 https.createServer({
-    key: fs.readFileSync('key.pem'),
-    cert: fs.readFileSync('cert.pem'),
+    key: fs.readFileSync('app/key.pem'),
+    cert: fs.readFileSync('app/cert.pem'),
     passphrase: 'HiddenPlaces'
 }, app).listen(8080);
 console.log('---- Site: https://localhost:8080/index.html ----');
